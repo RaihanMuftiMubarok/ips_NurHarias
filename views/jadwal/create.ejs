@@ -1,0 +1,63 @@
+<%- include('../partials/__head.ejs') %>
+<body>
+<div class="container-scroller d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+    <!-- partial:partials/_navbar.html -->
+    <!-- partial -->
+    <div class="main-panel w-100">
+        <div class="content-wrapper d-flex align-items-center justify-content-center">
+            <div class="col-md-6 grid-margin stretch-card">
+                <div class="card" style="width: 100%;">
+                    <div class="card-body">
+                        <h4 class="card-title">Input Data Jadwal</h4>
+                        <p class="card-description">
+
+                        </p>
+                        <form action="/jadwal/store" method="POST" class="forms-sample">
+                            <div class="form-group">
+                                <label for="exampleFormControlSelect2">Jenis Latihan</label>
+                                <select class="form-control" id="exampleFormControlSelect2" name="id_jenis_latihan" required>
+                                    <option selected>Pilih</option>
+                                    <% for(var i=0; i < data.length; i++){ %>
+                                        <option value="<%= data[i].id_jenis_latihan %>"><%= data[i].nama_latihan %></option>
+                                    <% } %>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="minggu">Minggu</label>
+                                <input type="text" class="form-control" id="minggu" name="minggu" placeholder="minggu">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="hari">Hari</label>
+                                <select class="form-select" aria-label="Default select example" id="hari" name="hari">
+                                    <option selected>Pilih Hari</option>
+                                    <option value="senin">Senin</option>
+                                    <option value="selasa">Selasa</option>
+                                    <option value="rabu">Rabu</option>
+                                    <option value="kamis">Kamis</option>
+                                    <option value="jumat">Jumat</option>
+                                    <option value="sabtu">Sabtu</option>
+                                    <option value="minggu">Minggu</option>
+                                  </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="jam_mulai">Jam Mulai</label>
+                                <input type="time" class="form-control" id="jam_mulai" name="jam_mulai" placeholder="jam_mulai">
+                            </div>
+                            <div class="form-group">
+                                <label for="jam_selesai">Jam Selesai</label>
+                                <input type="time" class="form-control" id="jam_selesai" name="jam_selesai" placeholder="jam_selesai">
+                            </div>
+                            <button type="submit" class="btn btn-primary mr-2">Simpan</button>
+                            <button type="button" class="btn btn-light" onclick="history.back()">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- content-wrapper ends -->
+</div>
+<!-- container-scroller ends -->
+<%- include('../partials/__foot.ejs') %>
+</body>

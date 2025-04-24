@@ -1,0 +1,130 @@
+:root{
+    --green-color:#00712D;
+    --light-green-color:#DEF9C4;
+}
+
+h1{
+    font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+h2{
+    font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+h3{
+    font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+h4{
+    font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+h5{
+    font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+h6{
+    font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+a{
+    font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+p{
+    font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+.btn-success{
+    background-color: var(--green-color);
+}
+
+.text-primary {
+    color: #025589 !important;
+}
+
+.text-success{
+    color:var(--green-color);
+}
+
+.top-navbar {
+    background-color: var(--green-color);
+    color: white;
+    padding: 5px 15px;
+}
+.nav-link {
+    color: black !important;
+}
+.top-navbar span {
+    margin-left: 15px;
+}
+
+.card-beranda{
+    /* padding-left: 50px; */
+    /* padding-right: 50px; */
+    background-color: #f8f9fa;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+.title-post{
+    background-color: var(--green-color);
+    padding: 10px;
+}
+/* Sticky content untuk Recent Posts */
+.recent-posts {
+    position: sticky;
+    top: 190px; /* Sesuaikan dengan tinggi navbar */
+    z-index: 100;
+}
+.recent-posts .card img {
+    height: 5rem; 
+    object-fit: cover;
+}
+
+
+
+  /* footer */
+  .footer {
+    background: linear-gradient(rgba(0, 113, 45, 0.6), rgba(0, 113, 45, 0.6)), url('../images/silat3.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 40px 0;
+}
+.social-icons a {
+    color: white;
+    
+    font-size: 24px;
+}
+.contact-info p {
+    margin: 5px 0;
+}
+.map-container {
+    height: 200px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.footer-logo img {
+    max-width: 200px;
+}
+.footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+}

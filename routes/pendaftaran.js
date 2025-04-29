@@ -301,7 +301,7 @@ router.post("/update-status/:no_pendaftaran", async (req, res) => {
 
             // Kirim pesan WA konfirmasi penerimaan
             const nomorTujuan = formatNomor(pendaftaran.kontak);
-            const pesan = `Selamat anda sudah bergabung di IPS Nur Harias.\nAkun : ${pendaftaran.email}\nPassword : ${passwordAcak}`;
+            const pesan = `Selamat anda sudah bergabung di IPS Nur Harias.\n\nBerikut informasi akun anda sebagai Anggota\n\nAkun : ${pendaftaran.email}\nPassword : ${passwordAcak}`;
 
             const payload = qs.stringify({
                 target: nomorTujuan,

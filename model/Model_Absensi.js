@@ -143,7 +143,29 @@ class Model_Absensi {
         });
     }
 
-
+    static async getByNIAAndMonth(nia, bulan, tahun) {
+        return new Promise((resolve, reject) => {
+            connection.query(
+                `SELECT a.*, b.nama, c.nama_latihan 
+                 FROM absensi AS a 
+                 JOIN anggota AS b ON a.nia = b.nia 
+                 JOIN jenis_latihan AS c ON a.id_jenis_latihan = c.id_jenis_latihan 
+                 WHERE a.nia = ? 
+                   AND MONTH(a.tanggal) = ? 
+                   AND YEAR(a.tanggal) = ?
+                 ORDER BY a.tanggal ASC`,
+                [nia, bulan, tahun],
+                (err, rows) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(rows);
+                    }
+                }
+            );
+        });
+    }
+    
 
 }
 

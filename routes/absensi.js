@@ -37,31 +37,27 @@ router.get('/', async function (req, res, next) {
 
 
 router.get('/users', async (req, res) => {
-  console.log('Session role:', req.session.role); // Debug
-
-  // Validasi: hanya user dengan role "anggota" yang bisa masuk
   if (!req.session.userId || req.session.role !== 'anggota') {
-    console.log('❌ Akses ditolak. Redirect ke login.');
     return res.redirect('/login');
   }
 
   try {
     const id_users = req.session.userId;
-
-    // Dapatkan NIA dari tabel anggota berdasarkan id_users
     const anggotaRows = await Model_Anggota.getByUserId(id_users);
     const anggota = anggotaRows[0];
 
     if (!anggota) {
-      console.log('❌ Data anggota tidak ditemukan.');
       req.flash('error', 'Data anggota tidak ditemukan.');
       return res.redirect('/');
     }
 
     const nia = anggota.nia;
 
-    // Ambil rekap absensi berdasarkan NIA
-    const absensi = await Model_Absensi.getByNIA(nia);
+    // Ambil bulan dan tahun dari query, kalau tidak ada pakai bulan & tahun sekarang
+    const bulan = parseInt(req.query.bulan) || (new Date().getMonth() + 1);
+    const tahun = parseInt(req.query.tahun) || new Date().getFullYear();
+
+    const absensi = await Model_Absensi.getByNIAAndMonth(nia, bulan, tahun);
 
     res.render('absensi/users/index', {
       layout: 'layouts/main-layout',
@@ -71,13 +67,16 @@ router.get('/users', async (req, res) => {
         nama: req.session.nama,
         foto: req.session.foto,
         role: req.session.role
-      }
+      },
+      bulan,
+      tahun
     });
   } catch (error) {
     console.error('❌ Error saat memuat rekap absensi:', error);
     res.status(500).send('Terjadi kesalahan saat memuat rekap absensi.');
   }
 });
+
 
 
 
@@ -99,7 +98,12 @@ router.get('/create', async function (req, res, next) {
     res.render('absensi/create', {
       anggota,
       jenisLatihan,
-      tingkatan // kirim ke view kalau mau ditampilkan juga
+      tingkatan ,// kirim ke view kalau mau ditampilkan juga
+      user: {
+        nama: req.session.nama,
+        foto: req.session.foto,
+        role: req.session.role
+      }
     });
   } catch (error) {
     console.error(error);
@@ -152,8 +156,8 @@ router.post('/store', async function (req, res, next) {
 
 router.get('/detail/:nia', async (req, res) => {
   const nia = req.params.nia;
-  const bulan = new Date().getMonth() + 1;
-  const tahun = new Date().getFullYear();
+  const bulan = parseInt(req.query.bulan) || (new Date().getMonth() + 1);
+  const tahun = parseInt(req.query.tahun) || (new Date().getFullYear());
   const tahunAjaran = `${tahun}/${tahun + 1}`;
 
   try {
@@ -177,13 +181,19 @@ router.get('/detail/:nia', async (req, res) => {
       absensi,
       bulan,
       tahun,
-      tahunAjaran
+      tahunAjaran,
+      user: {
+        nama: req.session.nama,
+        foto: req.session.foto,
+        role: req.session.role
+      }
     });
   } catch (err) {
     console.error('Error saat menampilkan detail:', err);
     res.redirect('/absensi');
   }
 });
+
 
 
 

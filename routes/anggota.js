@@ -60,7 +60,7 @@ router.get('/create', async function (req, res, next) {
 
 router.post('/store', upload.single("foto"), async function (req, res, next) {
     try {
-        let {id_users: userId,
+        let { id_users: userId,
             no_pendaftaran,
             nama,
             jenis_kelamin,
@@ -73,34 +73,34 @@ router.post('/store', upload.single("foto"), async function (req, res, next) {
             pendidikan_terakhir,
             email,
             kontak,
-            tanggal_masuk} = req.body;
+            tanggal_masuk } = req.body;
         let Data = {
             id_users: userId,
-                no_pendaftaran,
-                nama,
-                jenis_kelamin,
-                tempat_tanggal_lahir,
-                alamat,
-                peminatan,
-                ayah,
-                ibu,
-                tingkatan,
-                pendidikan_terakhir,
-                email,
-                kontak,
-                tanggal_masuk,
+            no_pendaftaran,
+            nama,
+            jenis_kelamin,
+            tempat_tanggal_lahir,
+            alamat,
+            peminatan,
+            ayah,
+            ibu,
+            tingkatan,
+            pendidikan_terakhir,
+            email,
+            kontak,
+            tanggal_masuk,
             foto: req.file.filename
         }
         await Model_Anggota.Store(Data);
         req.flash('success', 'Berhasil menyimpan data');
         res.redirect('/anggota');
-        
+
     } catch (error) {
         req.flash('error', 'Terjadi kesalahan pada fungsi')
         console.log(error);
         res.redirect('/anggota')
     }
-    
+
 })
 
 
@@ -125,7 +125,7 @@ router.get("/edit/:id", async (req, res, next) => {
 });
 
 
-router.post("/update/:id",  upload.single("foto"), async (req, res, next) => {
+router.post("/update/:id", upload.single("foto"), async (req, res, next) => {
     try {
         const id = req.params.id;
         let filebaru = req.file ? req.file.filename : null;
@@ -176,6 +176,8 @@ router.post("/update/:id",  upload.single("foto"), async (req, res, next) => {
         res.redirect("/anggota");
     } catch (error) {
         console.log(error);
+        req.flash("error", "Gagal mengupdate data");
+        res.redirect("/anggota");
     }
 });
 

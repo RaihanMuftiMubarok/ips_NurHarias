@@ -120,13 +120,15 @@ router.post('/store', upload.single("foto"), async function (req, res, next) {
         const nomorTujuan = formatNomor(kontak);
 
         // 5. Kirim pesan WhatsApp via Fonnte
-        const pesan = `Selamat Datang di Ikatan Pencak Silat Nur Harias Ranting Talango\nAkun : ${email}\nPassword : ${randomPassword}`;
+        const pesan = `Selamat Datang di Ikatan Pencak Silat Nur Harias Ranting Talango\n\nBerikut informasi akun anda sebagai Pelatih\n\nAkun : ${email}\nPassword : ${randomPassword}`;
 
         const payload = qs.stringify({
             target: nomorTujuan,
             message: pesan,
-            countryCode: '62'
+            delay: 3 // delay dalam detik (opsional)
         });
+        
+        
 
         try {
             await axios.post('https://api.fonnte.com/send', payload, {

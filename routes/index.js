@@ -153,4 +153,13 @@ router.get("/logout", function (req, res) {
   });
 });
 
+// ROUTE UNTUK LOGOUT
+router.get("/logout/landingpage", function (req, res) {
+  req.session.destroy(function (err) {
+    if (err) {
+      console.error(err);
+    }
+    res.redirect("/");
+  });
+});
 module.exports = router;

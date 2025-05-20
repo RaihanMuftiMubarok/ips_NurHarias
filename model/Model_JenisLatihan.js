@@ -27,16 +27,18 @@ class Model_JenisLatihan {
     }
 
     static async getId(id){
-        return new Promise((resolve, reject) => {
-            connection.query('select * from jenis_latihan where id_jenis_latihan = ' + id, (err,rows) => {
-                if(err) {
-                    reject(err);
-                } else {
-                    resolve(rows);
-                }
-            })
-        })
-    }
+  return new Promise((resolve, reject) => {
+    connection.query(
+      'SELECT * FROM jenis_latihan WHERE id_jenis_latihan = ?',
+      [id],
+      (err, rows) => {
+        if(err) reject(err);
+        else resolve(rows);
+      }
+    );
+  });
+}
+
 
     static async Update(id, Data) {
         return new Promise((resolve, reject) => {

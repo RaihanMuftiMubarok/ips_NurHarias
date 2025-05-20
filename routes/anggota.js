@@ -5,6 +5,10 @@ const Model_Users = require('../model/Model_Users.js');
 const fs = require('fs');
 const multer = require('multer');
 const path = require('path');
+const QRCode = require('qrcode');
+const puppeteer = require('puppeteer');
+const ejs = require('ejs');
+
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -206,5 +210,63 @@ router.get('/detail/:id', async (req, res, next) => {
         next(error);
     }
 });
+
+// Detail kartu anggota
+router.get('/detail/:nia/kartu', async (req, res) => {
+    const nia = req.params.nia;
+
+    try {
+        const data = await Model_Anggota.getId(nia); // asumsi method getId menerima nia
+        if (!data) {
+            return res.status(404).send('Anggota tidak ditemukan');
+        }
+        const qrLink = `http://192.168.204.209:3000/anggota/detail/${nia}`; // saat scan di komputer server
+
+        //   const qrLink = `https://domainmu.com/anggota/detail/${nia}`; // ganti dengan domain asli
+        const qrCodeDataUrl = await QRCode.toDataURL(qrLink);
+
+        res.render('anggota/kartu', {
+            data: data[0],
+            qrCode: qrCodeDataUrl
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Terjadi kesalahan server');
+    }
+});
+
+router.get('/detail/:nia/kartu/download-image', async (req, res) => {
+    const nia = req.params.nia;
+    const url = `http://192.168.204.209:3000/anggota/detail/${nia}/kartu`; // Sesuaikan port
+
+    try {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+
+        await page.goto(url, {
+            waitUntil: 'networkidle0'
+        });
+
+        const buffer = await page.screenshot({ fullPage: true });
+
+        await browser.close();
+
+        const filename = `kartu-anggota-${nia}.png`;
+        const filepath = path.join(__dirname, '../public/images/anggota', filename);
+
+        fs.writeFileSync(filepath, buffer);
+
+        res.download(filepath, filename, () => {
+            // Hapus file setelah diunduh (opsional)
+            fs.unlinkSync(filepath);
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Gagal membuat gambar kartu.');
+    }
+});
+
+
 
 module.exports = router;

@@ -3,6 +3,7 @@ const router = express.Router();
 const Model_Absensi = require("../model/Model_Absensi");
 const Model_Anggota = require("../model/Model_Anggota");
 const Model_JenisLatihan = require("../model/Model_JenisLatihan");
+const ExcelJS = require('exceljs');
 
 // GET - Tampilkan daftar absensi
 // GET - Tampilkan daftar anggota (halaman index absensi)
@@ -23,7 +24,8 @@ router.get('/', async function (req, res, next) {
       user: {
         nama: req.session.nama,
         foto: req.session.foto,
-        role: req.session.role},
+        role: req.session.role
+      },
       success: req.flash('success'),
       error: req.flash('error')
     });
@@ -98,7 +100,7 @@ router.get('/create', async function (req, res, next) {
     res.render('absensi/create', {
       anggota,
       jenisLatihan,
-      tingkatan ,// kirim ke view kalau mau ditampilkan juga
+      tingkatan,// kirim ke view kalau mau ditampilkan juga
       user: {
         nama: req.session.nama,
         foto: req.session.foto,
@@ -113,7 +115,6 @@ router.get('/create', async function (req, res, next) {
 });
 
 
-// POST - Simpan data absensi
 router.post('/store', async function (req, res, next) {
   try {
     const { tanggal, id_jenis_latihan, nia, status } = req.body;
@@ -130,7 +131,7 @@ router.post('/store', async function (req, res, next) {
     }
 
     const idAnggotaArray = Array.isArray(nia) ? nia : [nia];
-    const statusArray = Array.isArray(status) ? status : [status];
+    const statusArray = Object.keys(status).map(key => status[key]);
 
     for (let i = 0; i < idAnggotaArray.length; i++) {
       const dataInsert = {
@@ -141,7 +142,6 @@ router.post('/store', async function (req, res, next) {
       };
 
       console.log("📝 Data yang akan disimpan:", dataInsert);
-
       await Model_Absensi.Store(dataInsert);
     }
 
@@ -153,6 +153,8 @@ router.post('/store', async function (req, res, next) {
     res.redirect('/absensi/create');
   }
 });
+
+
 
 router.get('/detail/:nia', async (req, res) => {
   const nia = req.params.nia;
@@ -194,7 +196,142 @@ router.get('/detail/:nia', async (req, res) => {
   }
 });
 
+router.get('/rekap', async (req, res) => {
+  const bulan = parseInt(req.query.bulan) || (new Date().getMonth() + 1);
+  const tahun = parseInt(req.query.tahun) || new Date().getFullYear();
+  const tingkatan = req.query.tingkatan || 'all';
+  const idLatihan = req.query.id_latihan || 'all';
+  const tahunAjaran = `${tahun}/${tahun + 1}`;
+  console.log('FILTER PARAMS:', { bulan, tahun, tingkatan, idLatihan });
 
+  try {
+    const latihanList = await Model_JenisLatihan.getAll(); // ambil daftar latihan
+    const tingkatanList = await Model_Anggota.getTingkatanList(); // ambil enum tingkatan
+
+    const absensi = await Model_Absensi.getRekapByFilters({ bulan, tahun, tingkatan, idLatihan });
+
+    let nama_latihan = 'Semua Latihan';
+
+    if (idLatihan && idLatihan !== 'all') {
+      const latihan = await Model_JenisLatihan.getId(parseInt(idLatihan));
+      if (latihan && latihan.length > 0) {
+        nama_latihan = latihan[0].nama_latihan;
+      }
+    }
+    
+    
+
+
+
+    res.render('absensi/rekap', {
+      absensi,
+      bulan,
+      tahun,
+      tahunAjaran,
+      tingkatan,
+      idLatihan,
+      nama_latihan, // <- tambahkan ke render
+      latihanList,
+      tingkatanList,
+      user: {
+        nama: req.session.nama,
+        foto: req.session.foto,
+        role: req.session.role
+      }
+    });
+  } catch (err) {
+    console.error('Gagal load rekap:', err);
+    res.redirect('/absensi');
+  }
+});
+
+router.get('/rekap/export', async (req, res) => {
+  const bulan = parseInt(req.query.bulan) || (new Date().getMonth() + 1);
+  const tahun = parseInt(req.query.tahun) || new Date().getFullYear();
+  const tingkatan = req.query.tingkatan || 'all';
+  const idLatihan = req.query.id_latihan || 'all';
+
+  try {
+    const absensi = await Model_Absensi.getRekapByFilters({ bulan, tahun, tingkatan, idLatihan });
+
+    if (absensi.length === 0) {
+      return res.send('Tidak ada data untuk diekspor.');
+    }
+
+    const tanggalKeys = Object.keys(absensi[0]).filter(k => /^\d{1,2}$/.test(k));
+
+    // Buat workbook dan worksheet
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Rekap Absensi');
+
+    // Header kolom
+    const headerColumns = [
+      { header: 'NIA', key: 'nia', width: 12 },
+      { header: 'Nama', key: 'nama', width: 30 },
+    ];
+
+    tanggalKeys.forEach(tgl => {
+      headerColumns.push({
+        header: `Tgl ${tgl}`,
+        key: `tgl_${tgl}`,
+        width: 10
+      });
+    });
+
+    worksheet.columns = headerColumns;
+
+    // Tambahkan data absensi
+    absensi.forEach(item => {
+      const row = {
+        nia: item.nia,
+        nama: item.nama,
+      };
+
+      tanggalKeys.forEach(tgl => {
+        row[`tgl_${tgl}`] = item[tgl] || 'A'; // Default 'A' jika tidak ada
+      });
+
+      worksheet.addRow(row);
+    });
+
+    // Tambahkan border agar terlihat seperti tabel
+    worksheet.eachRow({ includeEmpty: false }, row => {
+      row.eachCell({ includeEmpty: false }, cell => {
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' }
+        };
+        cell.alignment = { vertical: 'middle', horizontal: 'center' };
+      });
+    });
+
+    // Nama bulan
+    const bulanNama = [
+      '', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+
+    const namaFile = `rekap_absensi_${bulanNama[bulan]}_${tahun}.xlsx`;
+
+    // Set header response
+    res.setHeader(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    );
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename=${namaFile}`
+    );
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    console.error('Gagal export rekap:', err);
+    res.redirect('/absensi/rekap');
+  }
+});
 
 
 

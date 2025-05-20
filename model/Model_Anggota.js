@@ -53,7 +53,7 @@ class Model_Anggota {
                     email, 
                     kontak, 
                     foto, 
-                    DATE_FORMAT(tanggal_masuk, '%d-%m-%Y %H:%i') AS tanggal_masuk 
+                    DATE_FORMAT(tanggal_masuk, '%d-%m-%Y') AS tanggal_masuk 
                 FROM anggota 
                 WHERE nia = ?
             `;
@@ -130,7 +130,21 @@ class Model_Anggota {
         });
       }
       
-
+      static async getTingkatanList() {
+        return new Promise((resolve, reject) => {
+          connection.query("SHOW COLUMNS FROM anggota LIKE 'tingkatan'", (err, rows) => {
+            if (err) reject(err);
+            else {
+              const enumStr = rows[0].Type;
+              const values = enumStr.match(/enum\((.*)\)/)[1]
+                .split(',')
+                .map(val => val.replace(/'/g, ''));
+              resolve(values);
+            }
+          });
+        });
+      }
+      
 }
 
 

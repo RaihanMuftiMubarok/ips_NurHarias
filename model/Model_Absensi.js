@@ -167,6 +167,40 @@ class Model_Absensi {
     }
     
 
+
+    static async getRekapByFilters({ bulan, tahun, tingkatan, idLatihan }) {
+        const params = [bulan, tahun];
+        let filter = `
+          WHERE MONTH(a.tanggal) = ? AND YEAR(a.tanggal) = ?
+        `;
+      
+        if (tingkatan !== 'all') {
+          filter += ` AND b.tingkatan = ?`;
+          params.push(tingkatan);
+        }
+      
+        if (idLatihan !== 'all') {
+          filter += ` AND c.id_jenis_latihan = ?`;
+          params.push(idLatihan);
+        }
+      
+        const query = `
+          SELECT a.*, b.nama, b.nia, b.tingkatan, c.nama_latihan 
+          FROM absensi AS a
+          JOIN anggota AS b ON a.nia = b.nia
+          JOIN jenis_latihan AS c ON a.id_jenis_latihan = c.id_jenis_latihan
+          ${filter}
+          ORDER BY b.nama, a.tanggal ASC
+        `;
+      
+        return new Promise((resolve, reject) => {
+          connection.query(query, params, (err, results) => {
+            if (err) reject(err);
+            else resolve(results);
+          });
+        });
+      }
+      
 }
 
 

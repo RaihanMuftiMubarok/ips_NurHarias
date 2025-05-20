@@ -1,62 +1,297 @@
 <%- include('../partials/__head.ejs') %>
-<body>
-<div class="container-scroller">
-    <!-- partial:partials/_navbar.html -->
     <%- include('../partials/__nav.ejs') %>
-    <!-- partial -->
-    <div class="main-panel">
-        <div class="content-wrapper" style="display: flex; justify-content: center; align-items: center; height: 100vh; background: linear-gradient(120deg, #2980b9, #09c180);">
-            <div class="welcome-box" style="text-align: center; color: #34495e; padding: 50px; background: rgba(255, 255, 255, 0.8); border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); backdrop-filter: blur(10px);">
-                <h1 style="font-size: 3rem; font-weight: bold; margin-bottom: 20px;">Selamat Datang di Halaman Admin</h1>
-                <p style="font-size: 1.3rem; margin-bottom: 30px;">Kelola website dengan mudah dan efektif melalui halaman admin ini.</p>
-                <!-- <a href="/dashboard" class="btn btn-primary" style="padding: 15px 40px; font-size: 1.2rem; background-color: 004dd3; border: none; color: white; border-radius: 50px; text-transform: uppercase; text-decoration: none; box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3); transition: all 0.4s;">Masuk ke Dashboard</a> -->
+
+        <body>
+            <div class="container py-5">
+                <!-- Welcome Section -->
+                <div class="mb-4">
+                    <h1 class="welcome-text">Welcome, <span id="username"><%= nama %></span></h1>
+                    <p class="sub-text">
+                        All systems are running smoothly! You have
+
+                    </p>
+                </div>
+
+                <!-- Content Cards -->
+                <div class="row g-4">
+                    <!-- Left Card with Image -->
+                    <div class="col-lg-8">
+                        <div class="main-card d-flex align-items-center justify-content-between flex-column flex-md-row"
+                            style="background-color: transparent;">
+                            <img src="../../images/bg_silat.png" alt="Illustration"
+                                class="image-illustration mb-3 mb-md-0" style="width: 50rem;" />
+                            <!-- You can replace the image URL above with your image -->
+
+                        </div>
+                    </div>
+
+                    <!-- Jumlah Cards -->
+                    <div class="col-lg-4 d-flex flex-column gap-4 ">
+                        <div class="jumlah-card">
+                            <b class="fs-3">Jumlah Anggota</b>
+                            <p class="fs-1">
+                                <%= jumlahAnggota %>
+                            </p>
+                        </div>
+                        <div class="jumlah-card">
+                            <b class="fs-3">Jumlah Pelatih</b>
+                            <p class="fs-1">
+                                <%= jumlahPelatih %>
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
-<!-- content-wrapper ends -->
-<%- include('../partials/__foot.ejs') %>
 
-<!-- Custom CSS for additional styles -->
-<style>
-    /* Button Hover Effects */
-    .btn:hover {
-        background-color: #004dd3;
-        transform: translateY(-5px);
-        box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.4);
+            <div class="container py-5">
+                <div class="card card-custom">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div id="chartWrapper">
+                                <!-- 🎯 Memberikan width dan height FIX di sini -->
+                                <canvas id="sabukChart" width="400" height="400"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                              <% 
+                                const warna = {
+                                  hitam: '#2E2E92',
+                                  merah: '#E74C3C',
+                                  biru: '#3498DB',
+                                  hijau: '#27AE60',
+                                  oren: '#E67E22',
+                                  kuning: '#F1C40F',
+                                  putih: '#BDC3C7',
+                                  intan: '#FFFDF6'
+                                };
+                          
+                                const label = {
+                                  hitam: 'Sabuk Hitam',
+                                  merah: 'Sabuk Merah',
+                                  biru: 'Sabuk Biru',
+                                  hijau: 'Sabuk Hijau',
+                                  oren: 'Sabuk Oren',
+                                  kuning: 'Sabuk Kuning',
+                                  putih: 'Sabuk Putih',
+                                  intan: 'Sabuk Putih Satin (Intan)'
+                                };
+                          
+                                const jumlahMap = {};
+                                tingkatanData.forEach(item => {
+                                  jumlahMap[item.tingkatan] = item.jumlah;
+                                });
+                          
+                                Object.keys(label).forEach(key => { 
+                              %>
+                              <li class="legend-item d-flex justify-content-between align-items-center">
+                                <div>
+                                  <span class="legend-color" style="background-color:<%= warna[key] %>;"></span>
+                                  <%= label[key] %>
+                                </div>
+                                <span class="badge bg-secondary rounded-pill"><%= jumlahMap[key] || 0 %></span>
+                              </li>
+                              
+                              <% }) %>
+                            </ul>
+                          </div>
+                          
+                    </div>
+                </div>
+            </div>
+            <!-- content-wrapper ends -->
+             
+
+
+
+                <!-- Custom CSS for additional styles -->
+                <style>
+                    body {
+                        background-color: #f4f6ff;
+                    }
+
+                    .welcome-text {
+                        font-size: 2rem;
+                        font-weight: bold;
+                    }
+
+                    .sub-text {
+                        color: #555;
+                    }
+
+                    .highlight-link {
+                        color: #5a57ff;
+                        text-decoration: none;
+                        font-weight: 500;
+                    }
+
+                    .main-card {
+                        background-color: #e7efff;
+
+                    }
+
+                    .jumlah-card {
+                        background-color: #DEF9C4;
+                        border-radius: 1rem;
+                        /* color: white; */
+                        padding: 1rem;
+                        height: 100%;
+                    }
+
+                    .image-illustration {
+                        max-width: 100%;
+                        border-radius: 1rem;
+                    }
+
+                    /* grafik */
+                    .card-custom {
+                        border: none;
+                        border-radius: 1rem;
+                        background-color: #DEF9C4;
+                        padding: 2rem;
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+                        
+                    }
+
+                    .legend-color {
+                        width: 14px;
+                        height: 14px;
+                        border-radius: 50%;
+                        display: inline-block;
+                        margin-right: 8px;
+                    }
+
+                    #chartWrapper {
+                        width: 100%;
+                        max-width: 400px;
+                        margin: auto;
+                    }
+                    .legend-item {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 6px 0;
+                    border-bottom: 1px dashed #ccc;
+                    gap: 1rem; /* Jarak antar elemen */
+                  }
+
+
+                    .legend-item:last-child {
+                      border-bottom: none;
+                    }
+
+                    .badge {
+                      font-size: 0.9rem;
+                      padding: 0.4em 0.7em;
+                    }
+                    .legend-item {
+                      padding: 6px 0;
+                      border-bottom: 1px dashed #ccc;
+                    }
+
+                    .legend-item:last-child {
+                      border-bottom: none;
+                    }
+
+                    .badge {
+                      font-size: 0.9rem;
+                      padding: 0.4em 0.7em;
+                      margin-left: 6px
+                    }
+
+                </style>
+
+<!-- Core JS -->
+<!-- build:js assets/vendor/js/core.js -->
+<script src="../../sneat/assets/vendor/libs/jquery/jquery.js"></script>
+<script src="../../sneat/assets/vendor/libs/popper/popper.js"></script>
+<script src="../../sneat/assets/vendor/js/bootstrap.js"></script>
+<script src="../../sneat/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+<script src="../../sneat/assets/vendor/js/menu.js"></script>
+<!-- endbuild -->
+
+<!-- Vendors JS -->
+<script src="../../sneat/assets/vendor/libs/apex-charts/apexcharts.js"></script>
+
+<!-- Main JS -->
+<script src="../../sneat/assets/js/main.js"></script>
+
+<!-- Page JS -->
+<script src="../../sneat/assets/js/dashboards-analytics.js"></script>
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<!-- Bootstrap & Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('sabukChart').getContext('2d');
+  
+    // Urutan tetap tingkatan
+    const labelMap = {
+      hitam: "Hitam",
+      merah: "Merah",
+      biru: "Biru",
+      hijau: "Hijau",
+      oren: "Oren",
+      kuning: "Kuning",
+      putih: "Putih",
+      intan: "Putih Satin (Intan)"
+    };
+  
+    const warnaMap = {
+      hitam: '#2E2E92',
+      merah: '#E74C3C',
+      biru: '#3498DB',
+      hijau: '#27AE60',
+      oren: '#E67E22',
+      kuning: '#F1C40F',
+      putih: '#BDC3C7',
+      intan: '#FFFDF6'
+    };
+  
+    // Data dari backend
+    const rawData = <%- JSON.stringify(tingkatanData) %>;
+  
+    // Inisialisasi array dalam urutan tetap
+    const orderedLabels = [];
+    const orderedData = [];
+    const orderedColors = [];
+  
+    for (const key of Object.keys(labelMap)) {
+      orderedLabels.push(labelMap[key]);
+      const found = rawData.find(item => item.tingkatan === key);
+      orderedData.push(found ? found.jumlah : 0);
+      orderedColors.push(warnaMap[key]);
     }
-
-    /* Welcome Box Animation */
-    .welcome-box {
-        animation: fadeIn 1.5s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
+  
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: orderedLabels,
+        datasets: [{
+          data: orderedData,
+          backgroundColor: orderedColors,
+          borderWidth: 2,
+          cutout: '60%'
+        }]
+      },
+      options: {
+        responsive: false,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
         }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
+      }
+    });
+  </script>
+  
+  
+  
 
-    /* Text Shadow for Better Readability */
+</body>
 
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        h1 {
-            font-size: 2.5rem;
-        }
-
-        p {
-            font-size: 1.1rem;
-        }
-
-        .btn {
-            padding: 12px 30px;
-            font-size: 1rem;
-        }
-    }
-</style>
+</html>

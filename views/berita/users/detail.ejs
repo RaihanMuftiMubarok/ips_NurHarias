@@ -17,7 +17,7 @@
         rel="stylesheet">
     <!-- MDB -->
     <link rel="stylesheet" href="css/mdb.min.css" />
-    <link rel="stylesheet" href="../stylesheets/berita.css" />
+    <link rel="stylesheet" href="../../stylesheets/berita.css" />
 
     <!-- CSS for Floating Action Button -->
 
@@ -44,7 +44,7 @@
         <nav class="navbar navbar-expand-lg bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="#">
-                    <img src="../images/logo_navbar.png" alt="Logo" width="auto" height="70">
+                    <img src="../../images/logo_navbar.png" alt="Logo" width="auto" height="70">
 
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -120,58 +120,41 @@
 
     <div class="container py-5">
         <div class="row">
-            <!-- berita utama -->
-            <div class="col-lg-9">
-                <h2 class="text-success fw-bold mb-3">Berita</h2>
-                <div class="row">
-                    <% data.forEach((berita) => { %>
-                      <div class="col-md-6 col-lg-4 mb-4">
-                        <a href="/berita/detail/<%= berita.id_berita %>" class="text-decoration-none">
-                          <div class="card shadow" style="height: 100%;
-                          display: flex;
-                          flex-direction: column;">
-                            <img src="/images/berita/<%= berita.gambar %>" class="card-img-top" alt="<%= berita.judul %>" style="aspect-ratio: 16 / 9; /* atau sesuaikan tinggi sesuai desain */
-                            object-fit: cover;
-                            width: 100%;"> <!-- Sesuaikan path gambar -->
-                            <div class="card-body text-start" style=" flex-grow: 1;">
-                              <p class="text-muted"><small><span><%= berita.nama_depan %></span> <%= berita.tanggal_format %></small></p>
-                              <h6 class="card-title text-dark"><%= berita.judul %></h6>
-                              <p class="card-text text-muted"><small><%= berita.deskripsi.substring(0, 80) %>...</small></p> <!-- Potong deskripsi -->
-                            </div>
-                          </div>
-                        </a>
-                      </div>
-                    <% }) %>
+          <!-- Konten Berita -->
+          <div class="col-lg-9">
+              <img src="/images/berita/<%= berita.gambar %>" alt="<%= berita.judul %>" class="img-fluid mb-4 " style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 0.5rem;">
+              <h2 class="fw-bold text-success mb-3"><%= berita.judul %></h2>
+            <p class="text-muted mb-2">
+              <small>Ditulis oleh <strong><%= berita.nama_depan %></strong> pada <%= berita.tanggal_format %></small>
+            </p>
+            <p class="text-dark" style="white-space: pre-line;"><%= berita.deskripsi %></p>
+          </div>
+      
+          <!-- Sidebar Recent Posts -->
+          <div class="col-lg-3">
+            <div class="card shadow p-3 recent-posts">
+              <h6 class="title-post text-white rounded">Recent Posts</h6>
+              <% recentPosts.forEach((post) => { %>
+                <a href="/berita/<%= post.id_berita %>" class="text-decoration-none">
+                  <div class="card shadow mb-3">
+                    <img src="/images/berita/<%= post.gambar %>" class="card-img-top" alt="<%= post.judul %>">
+                    <div class="card-body text-start">
+                      <h6 class="card-title text-dark"><%= post.judul %></h6>
+                    </div>
                   </div>
-                  
-
+                </a>
+              <% }) %>
             </div>
-            
-            <!-- Bagian Recent Posts -->
-            <div class="col-lg-3">
-                <div class="card shadow p-3 recent-posts">
-                    <h6 class="title-post text-white  rounded">Recent Posts</h6>
-                    <% recentPosts.forEach((berita) => { %>
-                        <a href="/berita/<%= berita.id_berita %>" class="text-decoration-none">
-                          <div class="card shadow mb-3">
-                            <img src="/images/berita/<%= berita.gambar %>" class="card-img-top" alt="<%= berita.judul %>">
-                            <div class="card-body text-start">
-                              <h6 class="card-title text-dark"><%= berita.judul %></h6>
-                            </div>
-                          </div>
-                        </a>
-                      <% }) %>
-                </div>
-            </div>
-
+          </div>
         </div>
-    </div>
+      </div>
+      
 
     <footer class="footer text-light">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-4 text-center footer-logo">
-                    <img src="../images/logo_footer.png" alt="Logo" class="mb-5">
+                    <img src="../../images/logo_footer.png" alt="Logo" class="mb-5">
                     <div class="social-icons">
                         <a href="#">
                             <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">

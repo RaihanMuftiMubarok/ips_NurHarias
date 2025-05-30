@@ -6,6 +6,7 @@ const fs = require('fs');
 const multer = require('multer');
 const path = require('path');
 
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'public/images/berita')
@@ -37,21 +38,25 @@ router.get('/', async (req, res, next) => {
 
 router.get('/users', async function (req, res, next) {
     try {
-        let rows = await Model_Berita.getAll();
-        res.render('berita/users/index', {
-            data: rows,
-            user: {
-                nama: req.session.nama,
-                foto: req.session.foto,
-                role: req.session.role,
-              },
-        });
+      let rows = await Model_Berita.getAll();
+      let recentPosts = await Model_Berita.getLimited(3); // Ambil 3 berita terbaru, selain yang sedang ditampilkan penuh (opsional)
+  
+      res.render('berita/users/index', {
+        data: rows,
+        recentPosts: recentPosts,
+        user: {
+          nama: req.session.nama,
+          foto: req.session.foto,
+          role: req.session.role,
+        },
+      });
     } catch (error) {
-        console.error("Error:", error);
-        req.flash('invalid', 'Terjadi kesalahan saat memuat data berita');
-        res.redirect('/berita');
+      console.error("Error:", error);
+      req.flash('invalid', 'Terjadi kesalahan saat memuat data berita');
+      res.redirect('/berita');
     }
-});
+  });
+  
 
 
 
@@ -63,7 +68,10 @@ router.get('/create', async function (req, res, next) {
         // if(Data[0].level_users == "2") {
         res.render('berita/create', {
             judul: '',
+            id_penulis: '',
             deskripsi: '',
+            tanggal_posting: '',
+            gambar: '',
 
             data: Data,
         })
@@ -79,23 +87,28 @@ router.get('/create', async function (req, res, next) {
 
 router.post('/store', upload.single("gambar"), async function (req, res, next) {
     try {
-        let {judul, deskripsi} = req.body;
+        let { judul, deskripsi } = req.body;
+        let id_penulis = req.session.userId; // Ambil dari session login
+        let tanggal_posting = new Date(); // Tanggal saat ini
+
         let Data = {
             judul,
+            id_penulis,
+            tanggal_posting,
             deskripsi,
             gambar: req.file.filename
         }
+
         await Model_Berita.Store(Data);
         req.flash('success', 'Berhasil menyimpan data');
         res.redirect('/berita');
-        
     } catch (error) {
-        req.flash('error', 'Terjadi kesalahan pada fungsi')
+        req.flash('error', 'Terjadi kesalahan pada fungsi');
         console.log(error);
-        res.redirect('/berita')
+        res.redirect('/berita');
     }
-    
-})
+});
+
 
 
 router.get("/edit/:id", async (req, res, next) => {
@@ -119,12 +132,12 @@ router.get("/edit/:id", async (req, res, next) => {
 });
 
 
-router.post("/update/:id",  upload.single("gambar_berita"), async (req, res, next) => {
+router.post("/update/:id",  upload.single("gambar"), async (req, res, next) => {
     try {
         const id = req.params.id;
         let filebaru = req.file ? req.file.filename : null;
         let rows = await Model_Berita.getId(id);
-        const namaFileLama = rows[0].gambar_berita;
+        const namaFileLama = rows[0].gambar;
 
         if (filebaru && namaFileLama) {
             const pathFileLama = path.join(__dirname, '../public/images/berita', namaFileLama);
@@ -132,16 +145,21 @@ router.post("/update/:id",  upload.single("gambar_berita"), async (req, res, nex
         }
 
         let {
-            nama_berita,
-            deskripsi_berita,
+            judul,
+            id_penulis,
+            tanggal_posting,
+            deskripsi,
         } = req.body;
         
-        let gambar_berita = filebaru || namaFileLama
+        let gambar = filebaru || namaFileLama
 
         let Data = {
-            nama_berita: nama_berita,
-            deskripsi_berita: deskripsi_berita,
-            gambar_berita
+            judul,
+            id_penulis,
+            tanggal_posting,
+            deskripsi,
+            gambar
+
         }
         console.log(req.body);
         console.log(Data);
@@ -165,5 +183,35 @@ router.get('/delete/:id', async (req, res, next) => {
     }
 });
 
+router.get('/detail/:id_berita', async (req, res) => {
+    try {
+      const id = req.params.id_berita;
+      const berita = await Model_Berita.getById(id);
+  
+      if (!berita) {
+        req.flash('invalid', 'Berita tidak ditemukan');
+        return res.redirect('/users');
+      }
+  
+      const recentPosts = await Model_Berita.getLimited(3); // atau berapa pun jumlah recent post yang diinginkan
+  
+      res.render('berita/users/detail', {
+        berita,
+        recentPosts,
+        user: {
+            nama: req.session.nama,
+            foto: req.session.foto,
+            role: req.session.role,
+          },
+      });
+  
+    } catch (err) {
+      console.error(err);
+      req.flash('invalid', 'Terjadi kesalahan saat memuat berita');
+      res.redirect('/users');
+    }
+  });
+  
+  
 
 module.exports = router;

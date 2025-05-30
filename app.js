@@ -19,7 +19,7 @@ var pendaftaranRouter = require('./routes/pendaftaran');
 var anggotaRouter = require('./routes/anggota');
 var pelatihRouter = require('./routes/pelatih');
 var absensiRouter = require('./routes/absensi');
-
+var nilaiRouter = require('./routes/nilai');
 var beritaRouter = require('./routes/berita'); 
 
 
@@ -72,7 +72,7 @@ app.use('/pendaftaran', pendaftaranRouter);
 app.use('/anggota', anggotaRouter);
 app.use('/pelatih', pelatihRouter);
 app.use('/absensi', absensiRouter);
-
+app.use('/nilai', nilaiRouter);
 app.use('/berita', beritaRouter);
 
 

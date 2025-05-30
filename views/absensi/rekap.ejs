@@ -65,7 +65,11 @@
                   <% } else if (user && user.role==='anggota' ) { %>
                     <li><a class="dropdown-item" href="../../absensi/users">Absensi</a></li>
                     <% } %>
-                      <li><a class="dropdown-item" href="../../nilai/users">Nilai</a></li>
+                    <% if (user && user.role==='pelatih' ) { %>
+                      <li><a class="dropdown-item" href="../../nilai">Nilai</a></li>
+                      <% } else if (user && user.role==='anggota' ) { %>
+                          <li><a class="dropdown-item" href="../../nilai/users">Nilai</a></li>
+                          <% } %>
               </ul>
             </li>
             <li class="nav-item dropdown">
@@ -234,15 +238,14 @@
         <!-- Keterangan -->
         <div class="mt-3">
           <strong>Keterangan:</strong><br>
+      <p>2x Alfa tidak bisa mengikuti ujian kenaikan tingkat</p>
           H = Hadir<br> A = Alfa<br> I = Izin<br> S = Sakit
         </div>
       </div>
     </div>
-    <a href="/absensi/rekap/export?<%= 
-  'bulan=' + bulan + '&tahun=' + tahun + '&tingkatan=' + tingkatan + '&id_latihan=' + idLatihan 
-%>" class="btn btn-success">
-      Unduh Excel
-    </a>
+    <div class="form-group mb-4">
+      <a type="button" class="btn btn-secondary" href="/absensi">Kembali</a>
+    </div>
 
   </div>
 

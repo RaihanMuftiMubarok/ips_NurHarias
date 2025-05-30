@@ -20,6 +20,8 @@
                                                 <th>No</th>
                                                 <th>Gambar</th>
                                                 <th>Judul Berita</th>
+                                                <th>Penulis</th>
+                                                <th>Tanggal Posting</th>
                                                 <th>Deskripsi Berita</th>
                                                 <th colspan="2">Aksi</th>
                                             </tr>
@@ -29,10 +31,12 @@
                                             <tr>
                                                 <th scope="row"><%= (i + 1) %></th>
                                                 <td class="py-1">
-                                                    <img src="/images/berita/<%= data[i].gambar_berita %>" height="100" width="150" alt="Gambar berita"/>
+                                                    <img src="/images/berita/<%= data[i].gambar %>" height="100" width="150" alt="Gambar berita"/>
                                                 </td>
-                                                <td><%= data[i].nama_berita %></td>
-                                                <td><%= data[i].deskripsi_berita.length > 20 ? data[i].deskripsi_berita.substring(0, 20) + '...' : data[i].deskripsi_berita %></td>
+                                                <td><%= data[i].judul %></td>
+                                                <td><%= data[i].nama_depan %></td>
+                                                <td><%= data[i].tanggal_format %></td>
+                                                <td><%= data[i].deskripsi.length > 20 ? data[i].deskripsi.substring(0, 20) + '...' : data[i].deskripsi %></td>
                                                 <td>
                                                     <a href="/berita/edit/<%= data[i].id_berita %>" class="btn btn-sm btn-warning">Edit</a>
                                                     <a href="/berita/delete/<%= data[i].id_berita %>" class="btn btn-sm btn-danger">Delete</a>

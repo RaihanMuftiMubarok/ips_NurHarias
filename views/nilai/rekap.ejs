@@ -17,7 +17,7 @@
     rel="stylesheet">
   <!-- MDB -->
   <link rel="stylesheet" href="css/mdb.min.css" />
-  <link rel="stylesheet" href="../stylesheets/berita.css" />
+  <link rel="stylesheet" href="../../stylesheets/berita.css" />
 
   <!-- CSS for Floating Action Button -->
 
@@ -40,160 +40,207 @@
         nurhariasrantingtalango@gmail.com</span>
     </div>
 
-<!-- Navbar Utama -->
-<nav class="navbar navbar-expand-lg bg-white shadow-sm">
-  <div class="container">
-      <a class="navbar-brand" href="#">
-          <img src="../images/logo_navbar.png" alt="Logo" width="auto" height="70">
+    <!-- Navbar Utama -->
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <img src="../../images/logo_navbar.png" alt="Logo" width="auto" height="70">
 
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
           aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav mx-auto">
-              <li class="nav-item"><a class="nav-link" href="/">Beranda</a></li>
-              <li class="nav-item"><a class="nav-link" href="#">Tentang NH</a></li>
-              <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="latihanDropdown" role="button"
-                      data-bs-toggle="dropdown" aria-expanded="false">Latihan</a>
-                  <ul class="dropdown-menu" aria-labelledby="latihanDropdown">
-                      <li><a class="dropdown-item" href="../../jadwal/users">Jadwal</a></li>
-                      <% if (user && user.role==='pelatih' ) { %>
-                          <li><a class="dropdown-item" href="../../absensi">Absensi</a></li>
-                          <% } else if (user && user.role==='anggota' ) { %>
-                              <li><a class="dropdown-item" href="../../absensi/users">Absensi</a></li>
-                              <% } %>
-                              <% if (user && user.role==='pelatih' ) { %>
-                                <li><a class="dropdown-item" href="../../nilai">Nilai</a></li>
-                                <% } else if (user && user.role==='anggota' ) { %>
-                                    <li><a class="dropdown-item" href="../../nilai/users">Nilai</a></li>
-                                    <% } %>
-                  </ul>
-              </li>
-              <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="artikelDropdown" role="button"
-                      data-bs-toggle="dropdown" aria-expanded="false">Artikel</a>
-                  <ul class="dropdown-menu" aria-labelledby="artikelDropdown">
-                      <li><a class="dropdown-item" href="../../berita/users">Berita</a></li>
-                      <li><a class="dropdown-item" href="../../album/users">Album</a></li>
-                  </ul>
-              </li>
-              <li class="nav-item"><a class="nav-link" href="../../pendaftaran/users">Pendaftaran</a></li>
+            <li class="nav-item"><a class="nav-link" href="/">Beranda</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Tentang NH</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="latihanDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">Latihan</a>
+              <ul class="dropdown-menu" aria-labelledby="latihanDropdown">
+                <li><a class="dropdown-item" href="../../jadwal/users">Jadwal</a></li>
+                <% if (user && user.role==='pelatih' ) { %>
+                  <li><a class="dropdown-item" href="../../absensi">Absensi</a></li>
+                  <% } else if (user && user.role==='anggota' ) { %>
+                    <li><a class="dropdown-item" href="../../absensi/users">Absensi</a></li>
+                    <% } %>
+                    <% if (user && user.role==='pelatih' ) { %>
+                      <li><a class="dropdown-item" href="../../nilai">Nilai</a></li>
+                      <% } else if (user && user.role==='anggota' ) { %>
+                          <li><a class="dropdown-item" href="../../nilai/users">Nilai</a></li>
+                          <% } %>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="artikelDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">Artikel</a>
+              <ul class="dropdown-menu" aria-labelledby="artikelDropdown">
+                <li><a class="dropdown-item" href="../../berita/users">Berita</a></li>
+                <li><a class="dropdown-item" href="../../album/users">Album</a></li>
+              </ul>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="../../pendaftaran/users">Pendaftaran</a></li>
           </ul>
           <% if (user && user.nama) { %>
-              <div class="dropdown">
-                  <a class="d-flex align-items-center text-success text-decoration-none dropdown-toggle"
-                      href="#" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                      <img src="/images/<%= user.role === 'pelatih' ? 'pelatih' : 'anggota' %>/<%= user.foto || 'default.jpg' %>"
-                          alt="User" width="35" height="35" class="rounded-circle me-2"
-                          style="object-fit: cover;">
-                      <strong>
-                          <%= user.nama %>
-                      </strong>
+            <div class="dropdown">
+              <a class="d-flex align-items-center text-success text-decoration-none dropdown-toggle" href="#"
+                id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                <img
+                  src="/images/<%= user.role === 'pelatih' ? 'pelatih' : 'anggota' %>/<%= user.foto || 'default.jpg' %>"
+                  alt="User" width="35" height="35" class="rounded-circle me-2" style="object-fit: cover;">
+                <strong>
+                  <%= user.nama %>
+                </strong>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="userMenu">
+                <li class="d-flex justify-content-center">
+                  <img
+                    src="/images/<%= user.role === 'pelatih' ? 'pelatih' : 'anggota' %>/<%= user.foto || 'default.jpg' %>"
+                    alt="User" width="60" height="60" class="rounded-circle" style="object-fit: cover;">
+                </li>
+                <li class="d-flex justify-content-center">
+                  <a class="dropdown-item p-2 d-flex justify-content-center align-items-center gap-2"
+                    href="/logout/landingpage">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                      <path fill="#ff6c6c"
+                        d="M13 2v10h-2V2zm3.78 1.728l.809.589a9.5 9.5 0 1 1-11.178 0l.808-.59l1.178 1.617l-.808.59a7.5 7.5 0 1 0 8.822 0l-.808-.59z" />
+                    </svg>
+                    Logout
                   </a>
-                  <ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="userMenu">
-                      <li class="d-flex justify-content-center">
-                          <img src="/images/<%= user.role === 'pelatih' ? 'pelatih' : 'anggota' %>/<%= user.foto || 'default.jpg' %>"
-                              alt="User" width="60" height="60" class="rounded-circle"
-                              style="object-fit: cover;">
-                      </li>
-                      <li class="d-flex justify-content-center">
-                          <a class="dropdown-item p-2 d-flex justify-content-center align-items-center gap-2"
-                              href="/logout">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                  viewBox="0 0 24 24">
-                                  <path fill="#ff6c6c"
-                                      d="M13 2v10h-2V2zm3.78 1.728l.809.589a9.5 9.5 0 1 1-11.178 0l.808-.59l1.178 1.617l-.808.59a7.5 7.5 0 1 0 8.822 0l-.808-.59z" />
-                              </svg>
-                              Logout
-                          </a>
-                      </li>
-                  </ul>
-              </div>
+                </li>
+              </ul>
+            </div>
 
-              <% } else { %>
-                  <a href="/login" class="btn btn-success">Login</a>
-                  <% } %>
+            <% } else { %>
+              <a href="/login" class="btn btn-success">Login</a>
+              <% } %>
 
+        </div>
       </div>
-  </div>
-</nav>
+    </nav>
   </div>
 
-  <div class="container mt-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h3>Daftar Anggota</h3>
-      <a href="/absensi/create<%= tingkatan ? '?tingkatan=' + tingkatan : '' %>" class="btn btn-success mb-3">
-        Tambah Absensi
-      </a>
-      <a href="/absensi/rekap" class="btn btn-success mb-3">
-        <i class="bi bi-table"></i> Rekap Absensi
-      </a>
-      
-      
+
+
+  <div class="container mt-5">
+    <h2>Rekap Nilai Anggota</h2>
+  
+    <!-- Filter Form -->
+    <form method="GET" action="/nilai/rekap" class="row g-3 mb-4">
+      <div class="col-md-2">
+        <label class="form-label">Tingkatan</label>
+        <select name="tingkatan" class="form-select">
+          <option value="all" <%= tingkatan === 'all' ? 'selected' : '' %>>Semua</option>
+          <% tingkatanList.forEach(t => { %>
+            <option value="<%= t %>" <%= tingkatan === t ? 'selected' : '' %>><%= t %></option>
+          <% }) %>
+        </select>
+      </div>
+  
+      <div class="col-md-3">
+        <label class="form-label">Jenis Latihan</label>
+        <select name="id_latihan" class="form-select">
+          <option value="all" <%= idLatihan === 'all' ? 'selected' : '' %>>Semua</option>
+          <% latihanList.forEach(l => { %>
+            <option value="<%= l.id_jenis_latihan %>" <%= idLatihan == l.id_jenis_latihan ? 'selected' : '' %>>
+              <%= l.nama_latihan %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+  
+      <% const namaBulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']; %>
+  
+      <!-- <div class="col-md-2">
+        <label class="form-label">Bulan</label>
+        <select name="bulan" class="form-select">
+          <% for (let i = 1; i <= 12; i++) { %>
+            <option value="<%= i %>" <%= bulan == i ? 'selected' : '' %>><%= namaBulan[i - 1] %></option>
+          <% } %>
+        </select>
+      </div> -->
+  
+      <div class="col-md-2">
+        <label class="form-label">Tahun</label>
+        <input type="number" name="tahun" value="<%= tahun %>" class="form-control" required>
+      </div>
+  
+      <div class="col-md-3 align-self-end">
+        <button type="submit" class="btn btn-success w-100">Tampilkan</button>
+      </div>
+    </form>
+  
+    <div class="card p-4 mb-5">
+      <h5>Rekap Nilai Anggota Tahun <%= tahun %></h5>
+    
+      <div style="overflow-x:auto;">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <thead class="table-success">
+              <tr>
+                <th>NIA</th>
+                <th>Nama</th>
+                <th>Tingkatan</th>
+                <% for (let i = 0; i < 12; i++) { %>
+                  <th><%= namaBulan[i] %></th>
+                <% } %>
+              </tr>
+            </thead>
+            <tbody>
+              <% 
+                const grouped = {};
+                nilai.forEach(n => {
+                  if (!grouped[n.nia]) {
+                    grouped[n.nia] = {
+                      nama: n.nama,
+                      tingkatan: n.tingkatan,
+                      nilai_per_bulan: {}
+                    };
+                  }
+                  const month = new Date(n.tanggal).getMonth(); // 0-11
+                  grouped[n.nia].nilai_per_bulan[month] = n.nilai_angka;
+                });
+    
+                Object.entries(grouped).forEach(([nia, data]) => {
+              %>
+                <tr>
+                  <td><%= nia %></td>
+                  <td><%= data.nama %></td>
+                  <td><%= data.tingkatan %></td>
+                  <% for (let i = 0; i < 12; i++) { %>
+                    <td><%= data.nilai_per_bulan[i] || '-' %></td>
+                  <% } %>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
+    
+    <div class="form-group mb-4">
+      <a type="button" class="btn btn-secondary" href="/nilai">Kembali</a>
+    </div>
+
+  </div>
   
 
-    <form method="GET" action="/absensi" class="row g-3 mb-3">
-        <div class="col-md-4">
-          <label for="tingkatan" class="form-label">Filter Tingkatan</label>
-          <select class="form-select" name="tingkatan" id="tingkatan" onchange="this.form.submit()">
-            <option value="">-- Semua Tingkatan --</option>
-            <option value="intan" <%= tingkatan === 'intan' ? 'selected' : '' %>>Intan</option>
-            <option value="putih" <%= tingkatan === 'putih' ? 'selected' : '' %>>Putih</option>
-            <option value="kuning" <%= tingkatan === 'kuning' ? 'selected' : '' %>>Kuning</option>
-            <option value="oren" <%= tingkatan === 'oren' ? 'selected' : '' %>>Oren</option>
-            <option value="hijau" <%= tingkatan === 'hijau' ? 'selected' : '' %>>Hijau</option>
-            <option value="biru" <%= tingkatan === 'biru' ? 'selected' : '' %>>Biru</option>
-            <option value="merah" <%= tingkatan === 'merah' ? 'selected' : '' %>>Merah</option>
-            <option value="hitam" <%= tingkatan === 'hitam' ? 'selected' : '' %>>Hitam</option>
-          </select>
-        </div>
-      </form>
-      
-    <div class="table-responsive">
-      <table class="table table-bordered table-striped">
-        <thead class="table-success">
-          <tr>
-            <th>No</th>
-            <th>NIA</th>
-            <th>Nama</th>
-            <th>Tingkatan</th>
-            <th>Jenis Kelamin</th>
-            <th>Alamat</th>
-            <th>Aksi</th> <!-- Tambah kolom aksi -->
-          </tr>
-        </thead>
-        <tbody>
-          <% anggota.forEach((a, index) => { %>
-            <tr>
-              <td><%= index + 1 %></td>
-              <td><%= a.nia %></td>
-              <td><%= a.nama %></td>
-              <td><%= a.tingkatan %></td>
-              <td><%= a.jenis_kelamin %></td>
-              <td><%= a.alamat %></td>
-              <td>
-                <a href="/absensi/detail/<%= a.nia %>" class="btn btn-sm btn-secondary">Detail</a>
-              </td>
-              
-            </tr>
-          <% }) %>
-        </tbody>
-        
-      </table>
-    </div>
-  </div>
+
+
+
+
+
+
+
 
 
   <footer class="footer text-light">
     <div class="container">
       <div class="row align-items-center">
         <div class="col-md-4 text-center footer-logo">
-          <img src="../images/logo_footer.png" alt="Logo" class="mb-5">
+          <img src="../../images/logo_footer.png" alt="Logo" class="mb-5">
           <div class="social-icons">
             <a href="#">
               <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">

@@ -30,11 +30,16 @@
                                             <tr>
                                                 <th scope="row"><%= (i + 1) %></th>
                                                 <td class="py-1">
-                                                    <img src="/images/album/<%= data[i].gambar_album %>" height="100" width="150" alt="Gambar album"/>
+                                                    <img src="/images/album/<%= data[i].gambar %>" height="100" width="150" alt="Gambar album"/>
                                                 </td>
-                                                <td><%= data[i].nama_album %></td>
-                                                <td><%= data[i].jenis_album %></td>
-                                                <td><%= data[i].deskripsi_album.length > 100 ? data[i].deskripsi_album.substring(0, 100) + '...' : data[i].deskripsi_album %></td>
+                                                <td><%= data[i].judul %></td>
+                                                <td><%= data[i].kategori %></td>
+                                                <td>
+                                                    <%= data[i].deskripsi && data[i].deskripsi.length > 100 
+                                                        ? data[i].deskripsi.substring(0, 100) + '...' 
+                                                        : (data[i].deskripsi || '-') %>
+                                                  </td>
+                                                  
                                                 <td>
                                                     <a href="/album/edit/<%= data[i].id_album %>" class="btn btn-sm btn-warning">Edit</a>
                                                     <a href="/album/delete/<%= data[i].id_album %>" class="btn btn-sm btn-danger">Delete</a>

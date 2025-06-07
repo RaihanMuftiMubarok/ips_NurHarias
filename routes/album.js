@@ -59,7 +59,6 @@ router.get('/create', async function (req, res, next) {
         let Data = await Model_Album.getAll();
         // if(Data[0].level_users == "2") {
         res.render('album/create', {
-            nama_service: '',
             data: Data,
         })
         // }
@@ -72,14 +71,14 @@ router.get('/create', async function (req, res, next) {
     }
 })
 
-router.post('/store', upload.single("gambar_album"), async function (req, res, next) {
+router.post('/store', upload.single("gambar"), async function (req, res, next) {
     try {
-        let {nama_album,jenis_album ,deskripsi_album} = req.body;
+        let {judul,kategori ,deskripsi} = req.body;
         let Data = {
-            nama_album,
-            jenis_album,
-            deskripsi_album,
-            gambar_album: req.file.filename
+            judul,
+            kategori,
+            deskripsi,
+            gambar: req.file.filename
         }
         await Model_Album.Store(Data);
         req.flash('success', 'Berhasil menyimpan data');
@@ -115,12 +114,12 @@ router.get("/edit/:id", async (req, res, next) => {
 });
 
 
-router.post("/update/:id",  upload.single("gambar_album"), async (req, res, next) => {
+router.post("/update/:id",  upload.single("gambar"), async (req, res, next) => {
     try {
         const id = req.params.id;
         let filebaru = req.file ? req.file.filename : null;
         let rows = await Model_Album.getId(id);
-        const namaFileLama = rows[0].gambar_album;
+        const namaFileLama = rows[0].gambar;
 
         if (filebaru && namaFileLama) {
             const pathFileLama = path.join(__dirname, '../public/images/album', namaFileLama);
@@ -128,18 +127,18 @@ router.post("/update/:id",  upload.single("gambar_album"), async (req, res, next
         }
 
         let {
-            nama_album,
-            jenis_album,
-            deskripsi_album,
+            judul,
+            kategori,
+            deskripsi,
         } = req.body;
         
-        let gambar_album = filebaru || namaFileLama
+        let gambar = filebaru || namaFileLama
 
         let Data = {
-            nama_album: nama_album,
-            jenis_album: jenis_album,
-            deskripsi_album: deskripsi_album,
-            gambar_album
+            judul: judul,
+            kategori: kategori,
+            deskripsi: deskripsi,
+            gambar
         }
         console.log(req.body);
         console.log(Data);

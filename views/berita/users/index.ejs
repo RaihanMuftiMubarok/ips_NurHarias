@@ -152,7 +152,7 @@
                 <div class="card shadow p-3 recent-posts">
                     <h6 class="title-post text-white  rounded">Recent Posts</h6>
                     <% recentPosts.forEach((berita) => { %>
-                        <a href="/berita/<%= berita.id_berita %>" class="text-decoration-none">
+                        <a href="/berita/detail/<%= berita.id_berita %>" class="text-decoration-none">
                           <div class="card shadow mb-3">
                             <img src="/images/berita/<%= berita.gambar %>" class="card-img-top" alt="<%= berita.judul %>">
                             <div class="card-body text-start">

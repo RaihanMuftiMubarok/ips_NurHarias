@@ -100,36 +100,36 @@ router.post('/store', async function (req, res, next) {
 
 // GET - Detail nilai per anggota
 router.get('/detail/:nia', async (req, res) => {
-    const { nia } = req.params;
-    const bulan = parseInt(req.query.bulan) || new Date().getMonth() + 1;
-    const tahun = parseInt(req.query.tahun) || new Date().getFullYear();
-  
-    try {
-      const anggota = await Model_Anggota.getByNIA(nia);
-      const nilai = await Model_Nilai.getNilaiBulananByNIA(nia, bulan, tahun);
-  
-      res.render('nilai/detail', {
-        nia,
-        namaAnggota: anggota.nama, // asumsi field nama
-        bulan,
-        tahun,
-        nilai,
-        user: {
-            nama: req.session.nama,
-            foto: req.session.foto,
-            role: req.session.role
-          }
-      });
-    } catch (err) {
-      console.error(err);
-      res.status(500).send("Terjadi kesalahan.");
-    }
-  });
-  
+  const { nia } = req.params;
+  const bulan = parseInt(req.query.bulan) || new Date().getMonth() + 1;
+  const tahun = parseInt(req.query.tahun) || new Date().getFullYear();
+
+  try {
+    const anggota = await Model_Anggota.getByNIA(nia);
+    const nilai = await Model_Nilai.getNilaiBulananByNIA(nia, bulan, tahun);
+
+    res.render('nilai/detail', {
+      nia,
+      namaAnggota: anggota.nama, // asumsi field nama
+      bulan,
+      tahun,
+      nilai,
+      user: {
+        nama: req.session.nama,
+        foto: req.session.foto,
+        role: req.session.role
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Terjadi kesalahan.");
+  }
+});
+
 
 // GET - Rekap nilai semua anggota
 router.get('/rekap', async (req, res) => {
-  const bulan = parseInt(req.query.bulan) || (new Date().getMonth() + 1);
+  const bulan = req.query.bulan || 'all';
   const tahun = parseInt(req.query.tahun) || new Date().getFullYear();
   const tingkatan = req.query.tingkatan || 'all';
   const idLatihan = req.query.id_latihan || 'all';
@@ -139,14 +139,33 @@ router.get('/rekap', async (req, res) => {
     const latihanList = await Model_JenisLatihan.getAll();
     const tingkatanList = await Model_Anggota.getTingkatanList();
 
-    const nilai = await Model_Nilai.getRekapByFilters({ bulan, tahun, tingkatan, idLatihan });
+    // Kalau jenis latihan belum dipilih, langsung render view tanpa data
+    if (idLatihan === 'all') {
+      return res.render('nilai/rekap', {
+        nilai: [],
+        bulan,
+        tahun,
+        tahunAjaran,
+        tingkatan,
+        idLatihan,
+        nama_latihan: 'Belum dipilih',
+        latihanList,
+        tingkatanList,
+        user: {
+          nama: req.session.nama,
+          foto: req.session.foto,
+          role: req.session.role
+        }
+      });
+    }
 
-    let nama_latihan = 'Semua Latihan';
-    if (idLatihan !== 'all') {
-      const latihan = await Model_JenisLatihan.getId(parseInt(idLatihan));
-      if (latihan && latihan.length > 0) {
-        nama_latihan = latihan[0].nama_latihan;
-      }
+    // Lanjutkan kalau sudah pilih latihan
+    const nilai = await Model_Nilai.getRekapByFilters({ bulan, tahun, tingkatan, idLatihan });
+    let nama_latihan = 'Latihan';
+
+    const latihan = await Model_JenisLatihan.getId(parseInt(idLatihan));
+    if (latihan && latihan.length > 0) {
+      nama_latihan = latihan[0].nama_latihan;
     }
 
     res.render('nilai/rekap', {

@@ -123,14 +123,14 @@ class Model_Nilai {
           ORDER BY jl.id_jenis_latihan ASC
         `;
         return new Promise((resolve, reject) => {
-          connection.query(query, [nia, bulan, tahun], (err, results) => {
-            if (err) return reject(err);
-            resolve(results);
-          });
+            connection.query(query, [nia, bulan, tahun], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
         });
-      }
-      
-      
+    }
+
+
 
     static async getByNIAAndMonth(nia, bulan, tahun) {
         return new Promise((resolve, reject) => {
@@ -152,38 +152,42 @@ class Model_Nilai {
         });
     }
 
-    static async getRekapByFilters({ bulan, tahun, tingkatan, idLatihan }) {
-        const params = [bulan, tahun];
-        let filter = `
-            WHERE MONTH(a.tanggal) = ? AND YEAR(a.tanggal) = ?
+    static async getRekapByFilters({ tahun, bulan, tingkatan, idLatihan }) {
+        let query = `
+          SELECT n.nia, a.nama, a.tingkatan, n.tanggal, n.nilai_angka
+          FROM nilai n
+          JOIN anggota a ON n.nia = a.nia
+          WHERE YEAR(n.tanggal) = ?
         `;
-
+        
+        const params = [tahun];
+        
+        if (bulan && bulan !== 'all') {
+          query += ` AND MONTH(n.tanggal) = ?`;
+          params.push(bulan);
+        }
+        
         if (tingkatan !== 'all') {
-            filter += ` AND b.tingkatan = ?`;
-            params.push(tingkatan);
+          query += ` AND a.tingkatan = ?`;
+          params.push(tingkatan);
         }
-
+        
         if (idLatihan !== 'all') {
-            filter += ` AND c.id_jenis_latihan = ?`;
-            params.push(idLatihan);
+          query += ` AND n.id_jenis_latihan = ?`;
+          params.push(idLatihan);
         }
-
-        const query = `
-            SELECT a.*, b.nama, b.nia, b.tingkatan, c.nama_latihan 
-            FROM nilai AS a
-            JOIN anggota AS b ON a.nia = b.nia
-            JOIN jenis_latihan AS c ON a.id_jenis_latihan = c.id_jenis_latihan
-            ${filter}
-            ORDER BY b.nama, a.tanggal ASC
-        `;
-
+        
+        query += ` ORDER BY n.nia, n.tanggal`;
+        
         return new Promise((resolve, reject) => {
-            connection.query(query, params, (err, results) => {
-                if (err) reject(err);
-                else resolve(results);
-            });
+          connection.query(query, params, (err, results) => {
+            if (err) reject(err);
+            else resolve(results);
+          });
         });
-    }
+      }
+      
+      
 }
 
 module.exports = Model_Nilai;

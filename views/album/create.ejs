@@ -5,33 +5,33 @@
     <!-- partial -->
     <div class="main-panel">
         <div class="content-wrapper d-flex align-items-center justify-content-center">
-            <div class="col-md-6 grid-margin stretch-card">
+            <div class="col-md-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Tambah Album</h4>
                         <p class="card-description">Form untuk menambahkan album baru</p>
                         <form action="/album/store" method="POST" enctype="multipart/form-data" class="forms-sample">
                             <div class="form-group">
-                                <label for="gambar_album">Gambar Album</label>
-                                <input type="file" class="form-control" id="gambar_album" name="gambar_album" required>
+                                <label for="gambar">Gambar Album</label>
+                                <input type="file" class="form-control" id="gambar" name="gambar" required>
                             </div>
                             <div class="form-group">
-                                <label for="nama_album">Nama Album</label>
-                                <input type="text" class="form-control" id="nama_album" name="nama_album" placeholder="Nama Album" required>
+                                <label for="judul">Judul Album</label>
+                                <input type="text" class="form-control" id="judul" name="judul" placeholder="Judul Album" required>
                             </div>
                             <div class="form-group">
-                                <label for="exampleFormControlSelect2">Jenis Album</label>
-                                <select class="form-control" id="exampleFormControlSelect2" name="jenis_album" required>
-                                    <option selected>Pilih Album</option>
-                                        <option value="perkumpulan">Perkumpulan</option>
-                                        <option value="ramadhan">Ramadhan</option>
+                                <label for="exampleFormControlSelect2">kategori</label>
+                                <select class="form-control" id="exampleFormControlSelect2" name="kategori" required>
+                                    <option selected>Pilih Kategori</option>
                                         <option value="pelatihan">Pelatihan</option>
+                                        <option value="keagamaan">Keagamaan</option>
                                         <option value="acara">Acara</option>
+                                        <option value="prestasi">Prestasi</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="deskripsi_album">Deskripsi Album</label>
-                                <textarea class="form-control" id="deskripsi_album" name="deskripsi_album" placeholder="Deskripsi" required></textarea>
+                                <label for="deskripsi">Deskripsi Album</label>
+                                <textarea class="form-control" id="deskripsi" name="deskripsi" placeholder="Deskripsi" required></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary mr-2">Simpan</button>
                             <button type="button" class="btn btn-light" onclick="history.back()">Batal</button>

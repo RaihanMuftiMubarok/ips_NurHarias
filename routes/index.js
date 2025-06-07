@@ -5,6 +5,7 @@ const fs = require("fs");
 const multer = require("multer");
 const path = require("path");
 const bcrypt = require("bcrypt");
+const Model_Berita = require('../model/Model_Berita.js');
 
 var Model_Users = require("../model/Model_Users.js");
 
@@ -19,14 +20,27 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.get("/", function (req, res, next) {
-  res.render("index", {
-    user: {
-      nama: req.session.nama,
-      foto: req.session.foto,
-      role: req.session.role,
-    },
-  });
+router.get("/", async (req, res, next) => {
+  try {
+    let id = req.session.userId;
+    // let Data = await Model_Users.getId(id);
+    let rows = await Model_Berita.getAll();
+    let batas = await Model_Berita.getLimited(4);
+    res.render('index', {
+        data: rows,
+        batas: batas,
+        user: {
+          nama: req.session.nama,
+          foto: req.session.foto,
+          role: req.session.role,
+          
+        },
+        
+    });
+} catch (error) {
+    next(error);
+}
+
 });
 
 

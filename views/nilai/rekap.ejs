@@ -171,7 +171,12 @@
         <button type="submit" class="btn btn-success w-100">Tampilkan</button>
       </div>
     </form>
-  
+    
+    <% if (idLatihan === 'all') { %>
+      <div class="alert alert-warning mt-4" role="alert">
+        <strong>Silakan pilih jenis latihan terlebih dahulu</strong> untuk melihat rekap nilai.
+      </div>
+    <% } else { %>
     <div class="card p-4 mb-5">
       <h5>Rekap Nilai Anggota Tahun <%= tahun %></h5>
     
@@ -186,10 +191,17 @@
                 <% for (let i = 0; i < 12; i++) { %>
                   <th><%= namaBulan[i] %></th>
                 <% } %>
+                <th>Total</th>
+                <% if (idLatihan !== 'all') { %>
+                  <th>Ranking</th>
+                <% } %>
               </tr>
             </thead>
+            
+            
             <tbody>
-              <% 
+              <%
+                // Step 1: Grouping data berdasarkan NIA
                 const grouped = {};
                 nilai.forEach(n => {
                   if (!grouped[n.nia]) {
@@ -202,23 +214,48 @@
                   const month = new Date(n.tanggal).getMonth(); // 0-11
                   grouped[n.nia].nilai_per_bulan[month] = n.nilai_angka;
                 });
-    
-                Object.entries(grouped).forEach(([nia, data]) => {
+            
+                // Step 2: Ubah object menjadi array dan hitung total
+                const groupedArray = Object.entries(grouped).map(([nia, data]) => {
+                  let total = 0;
+                  for (let i = 0; i < 12; i++) {
+                    total += data.nilai_per_bulan[i] || 0;
+                  }
+                  return { nia, ...data, total };
+                });
+            
+                // Step 3: Urutkan jika filter latihan aktif
+                if (idLatihan !== 'all') {
+                  groupedArray.sort((a, b) => b.total - a.total);
+                }
               %>
+            
+              <% groupedArray.forEach((data, index) => { %>
                 <tr>
-                  <td><%= nia %></td>
+                  <td><%= data.nia %></td>
                   <td><%= data.nama %></td>
                   <td><%= data.tingkatan %></td>
-                  <% for (let i = 0; i < 12; i++) { %>
-                    <td><%= data.nilai_per_bulan[i] || '-' %></td>
+                  <% for (let i = 0; i < 12; i++) { 
+                      const nilai = data.nilai_per_bulan[i];
+                  %>
+                    <td class="<%= (nilai || 0) < 60 ? 'text-danger' : 'text-success' %>">
+                      <%= nilai || '-' %>
+                    </td>
+                  <% } %>
+                  <td><strong><%= data.total %></strong></td>
+                  <% if (idLatihan !== 'all') { %>
+                    <td><span class="badge bg-primary">#<%= index + 1 %></span></td>
                   <% } %>
                 </tr>
               <% }); %>
             </tbody>
+            
+            
           </table>
         </div>
       </div>
     </div>
+    <% } %>
     
     <div class="form-group mb-4">
       <a type="button" class="btn btn-secondary" href="/nilai">Kembali</a>

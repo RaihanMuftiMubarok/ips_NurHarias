@@ -117,29 +117,7 @@
     </nav>
   </div>
 
-  <% 
-// Data Bulan
-const namaBulan = [
-  'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-  'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-];
 
-// Hitung jumlah hari dalam bulan dan tahun yang dipilih
-const hariDalamBulan = new Date(tahun, bulan, 0).getDate();
-
-// Buat daftar jenis latihan unik
-const jenisLatihanList = [...new Set(absensi.map(item => item.nama_latihan))];
-
-// Struktur absensiMap: jenis_latihan => { tanggal => status }
-const absensiMap = {};
-jenisLatihanList.forEach(jenis => {
-  absensiMap[jenis] = {};
-});
-absensi.forEach(item => {
-  const tgl = new Date(item.tanggal).getDate();
-  absensiMap[item.nama_latihan][tgl] = item.status;
-});
-%>
 
 <div class="container mt-5">
   <h2>Rekap Absensi Kehadiran</h2>
@@ -172,6 +150,8 @@ absensi.forEach(item => {
             <th rowspan="2">No</th>
             <th rowspan="2">Jenis Latihan</th>
             <th colspan="<%= hariDalamBulan %>">Tanggal</th>
+            <th rowspan="2">Total Nilai</th>
+
           </tr>
           <tr>
             <% for (let tgl = 1; tgl <= hariDalamBulan; tgl++) { %>

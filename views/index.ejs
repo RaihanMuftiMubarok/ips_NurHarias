@@ -150,54 +150,25 @@
         <div class="container">
             <h2 class="fw-bold mb-4">Berita Terkini</h2>
             <div class="row">
+                <% batas.forEach((berita) => { %>
                 <div class="col-6 col-md-4 col-lg-3 mb-4">
-                    <a href="detail-berita.html" class="text-decoration-none">
-                        <div class="card">
-                            <img src="../images/berita1.jpg" class="card-img-top" alt="Berita 1">
-                            <div class="card-body text-start">
-                                <p class="text-muted"><small>07 Juni 2024</small></p>
-                                <h6 class="card-title text-dark">Kejuaraan Sakera Championship 2 UTM</h6>
-                                <p class="card-text text-muted"><small>Lorem ipsum dolor sit amet...</small></p>
-                            </div>
+                    <a href="/berita/detail/<%= berita.id_berita %>" class="text-decoration-none">
+                        <div class="card shadow" style="height: 100%;
+                        display: flex;
+                        flex-direction: column;">
+                          <img src="/images/berita/<%= berita.gambar %>" class="card-img-top" alt="<%= berita.judul %>" style="aspect-ratio: 16 / 9; /* atau sesuaikan tinggi sesuai desain */
+                          object-fit: cover;
+                          width: 100%;"> <!-- Sesuaikan path gambar -->
+                          <div class="card-body text-start" style=" flex-grow: 1;">
+                            <p class="text-muted"><small><span><%= berita.nama_depan %></span> <%= berita.tanggal_format %></small></p>
+                            <h6 class="card-title text-dark"><%= berita.judul %></h6>
+                            <p class="card-text text-muted"><small><%= berita.deskripsi.substring(0, 80) %>...</small></p> <!-- Potong deskripsi -->
+                          </div>
                         </div>
-                    </a>
+                      </a>
                 </div>
-                <div class="col-6 col-md-4 col-lg-3 mb-4">
-                    <a href="detail-berita.html" class="text-decoration-none">
-                        <div class="card">
-                            <img src="../images/berita1.jpg" class="card-img-top" alt="Berita 2">
-                            <div class="card-body text-start">
-                                <p class="text-muted"><small>07 Juni 2024</small></p>
-                                <h6 class="card-title text-dark">Kejuaraan Sakera Championship 2 UTM</h6>
-                                <p class="card-text text-muted"><small>Lorem ipsum dolor sit amet...</small></p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-6 col-md-4 col-lg-3 mb-4">
-                    <a href="detail-berita.html" class="text-decoration-none">
-                        <div class="card">
-                            <img src="../images/berita1.jpg" class="card-img-top" alt="Berita 3">
-                            <div class="card-body text-start">
-                                <p class="text-muted"><small>07 Juni 2024</small></p>
-                                <h6 class="card-title text-dark">Kejuaraan Sakera Championship 2 UTM</h6>
-                                <p class="card-text text-muted"><small>Lorem ipsum dolor sit amet...</small></p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-6 col-md-4 col-lg-3 mb-4">
-                    <a href="detail-berita.html" class="text-decoration-none">
-                        <div class="card">
-                            <img src="../images/berita1.jpg" class="card-img-top" alt="Berita 4">
-                            <div class="card-body text-start">
-                                <p class="text-muted"><small>07 Juni 2024</small></p>
-                                <h6 class="card-title text-dark">Kejuaraan Sakera Championship 2 UTM</h6>
-                                <p class="card-text text-muted"><small>Lorem ipsum dolor sit amet...</small></p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                <% }) %>
+
             </div>
             <a href="../../berita/users" class="btn btn-success mt-3">Berita Lainnya</a>
         </div>

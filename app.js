@@ -14,7 +14,7 @@ var superusersRouter = require('./routes/superusers');
 
 var jenis_latihanRouter = require('./routes/jenis_latihan');
 var jadwalRouter = require('./routes/jadwal');
-
+var albumRouter = require('./routes/album');
 var pendaftaranRouter = require('./routes/pendaftaran');
 var anggotaRouter = require('./routes/anggota');
 var pelatihRouter = require('./routes/pelatih');
@@ -74,6 +74,7 @@ app.use('/pelatih', pelatihRouter);
 app.use('/absensi', absensiRouter);
 app.use('/nilai', nilaiRouter);
 app.use('/berita', beritaRouter);
+app.use('/album', albumRouter);
 
 
 

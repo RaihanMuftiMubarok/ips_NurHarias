@@ -145,6 +145,18 @@ class Model_Anggota {
         });
       }
       
+      static async getKontakByNIA(nia) {
+        return new Promise((resolve, reject) => {
+          connection.query('SELECT nama, kontak FROM anggota WHERE nia = ?', [nia], (err, results) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(results[0]); // { nama: ..., kontak: ... }
+            }
+          });
+        });
+      }
+      
 }
 
 

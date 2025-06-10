@@ -4,6 +4,8 @@ const Model_Absensi = require("../model/Model_Absensi");
 const Model_Anggota = require("../model/Model_Anggota");
 const Model_JenisLatihan = require("../model/Model_JenisLatihan");
 const ExcelJS = require('exceljs');
+const fetch = require('node-fetch');
+
 
 // GET - Tampilkan daftar absensi
 // GET - Tampilkan daftar anggota (halaman index absensi)
@@ -119,13 +121,7 @@ router.post('/store', async function (req, res, next) {
   try {
     const { tanggal, id_jenis_latihan, nia, status } = req.body;
 
-    console.log("📅 tanggal:", tanggal);
-    console.log("🏋️‍♂️ id_jenis_latihan:", id_jenis_latihan);
-    console.log("👥 nia:", nia);
-    console.log("📊 status:", status);
-
     if (!tanggal || !id_jenis_latihan || !nia || !status) {
-      console.log("⚠️ Ada data kosong!");
       req.flash('error', 'Data tidak lengkap');
       return res.redirect('/absensi/create');
     }
@@ -134,15 +130,51 @@ router.post('/store', async function (req, res, next) {
     const statusArray = Object.keys(status).map(key => status[key]);
 
     for (let i = 0; i < idAnggotaArray.length; i++) {
+      const niaAnggota = idAnggotaArray[i];
+      const statusAnggota = statusArray[i];
+
       const dataInsert = {
-        nia: idAnggotaArray[i],
+        nia: niaAnggota,
         tanggal,
         id_jenis_latihan,
-        status: statusArray[i]
+        status: statusAnggota
       };
 
-      console.log("📝 Data yang akan disimpan:", dataInsert);
       await Model_Absensi.Store(dataInsert);
+
+      // ✅ Kirim WA jika status Alfa
+      if (statusAnggota === 'A') {
+        const kontak = await Model_Anggota.getKontakByNIA(niaAnggota);
+        if (kontak && kontak.kontak) {
+          let nomor = kontak.kontak;
+
+          if (nomor.startsWith('08')) {
+            nomor = '62' + nomor.slice(1); // ubah ke format internasional
+          }
+
+          const nama = kontak.nama;
+          const tanggalFormatted = new Date(tanggal).toLocaleDateString('id-ID');
+          const pesan = `Halo ${nama}, kami mendeteksi bahwa Anda TIDAK HADIR (Alfa) pada latihan tanggal ${tanggalFormatted}. Mohon konfirmasi ke pelatih.`;
+
+          try {
+            await fetch('https://api.fonnte.com/send', {
+              method: 'POST',
+              headers: {
+                Authorization: 'YoBt6b6x6KE9k4WsTPfw',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                target: nomor,
+                message: pesan
+              })
+            });
+
+            console.log(`✅ WA terkirim ke ${nama} (${nomor})`);
+          } catch (err) {
+            console.error(`❌ Gagal kirim WA ke ${nama}:`, err);
+          }
+        }
+      }
     }
 
     req.flash('success', 'Berhasil menyimpan data absensi!');
@@ -153,6 +185,7 @@ router.post('/store', async function (req, res, next) {
     res.redirect('/absensi/create');
   }
 });
+
 
 
 
@@ -218,8 +251,8 @@ router.get('/rekap', async (req, res) => {
         nama_latihan = latihan[0].nama_latihan;
       }
     }
-    
-    
+
+
 
 
 

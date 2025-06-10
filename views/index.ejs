@@ -55,8 +55,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link" href="#beranda">Beranda</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Tentang NH</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../../tentang_kami/users">Tentang NH</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="latihanDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">Latihan</a>
@@ -67,11 +67,11 @@
                                 <% } else if (user && user.role==='anggota' ) { %>
                                     <li><a class="dropdown-item" href="../../absensi/users">Absensi</a></li>
                                     <% } %>
-                                    <% if (user && user.role==='pelatih' ) { %>
-                                        <li><a class="dropdown-item" href="../../nilai">Nilai</a></li>
-                                        <% } else if (user && user.role==='anggota' ) { %>
-                                            <li><a class="dropdown-item" href="../../nilai/users">Nilai</a></li>
-                                            <% } %>
+                                        <% if (user && user.role==='pelatih' ) { %>
+                                            <li><a class="dropdown-item" href="../../nilai">Nilai</a></li>
+                                            <% } else if (user && user.role==='anggota' ) { %>
+                                                <li><a class="dropdown-item" href="../../nilai/users">Nilai</a></li>
+                                                <% } %>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -82,7 +82,7 @@
                             <li><a class="dropdown-item" href="../../album/users">Album</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="pendaftaran/users">Pendaftaran</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../../pendaftaran/users">Pendaftaran</a></li>
                 </ul>
                 <% if (user && user.nama) { %>
                     <div class="dropdown">
@@ -150,24 +150,33 @@
         <div class="container">
             <h2 class="fw-bold mb-4">Berita Terkini</h2>
             <div class="row">
-                <% batas.forEach((berita) => { %>
-                <div class="col-6 col-md-4 col-lg-3 mb-4">
-                    <a href="/berita/detail/<%= berita.id_berita %>" class="text-decoration-none">
-                        <div class="card shadow" style="height: 100%;
+                <% batas.forEach((berita)=> { %>
+                    <div class="col-6 col-md-4 col-lg-3 mb-4">
+                        <a href="/berita/detail/<%= berita.id_berita %>" class="text-decoration-none">
+                            <div class="card shadow" style="height: 100%;
                         display: flex;
                         flex-direction: column;">
-                          <img src="/images/berita/<%= berita.gambar %>" class="card-img-top" alt="<%= berita.judul %>" style="aspect-ratio: 16 / 9; /* atau sesuaikan tinggi sesuai desain */
+                                <img src="/images/berita/<%= berita.gambar %>" class="card-img-top"
+                                    alt="<%= berita.judul %>" style="aspect-ratio: 16 / 9; /* atau sesuaikan tinggi sesuai desain */
                           object-fit: cover;
                           width: 100%;"> <!-- Sesuaikan path gambar -->
-                          <div class="card-body text-start" style=" flex-grow: 1;">
-                            <p class="text-muted"><small><span><%= berita.nama_depan %></span> <%= berita.tanggal_format %></small></p>
-                            <h6 class="card-title text-dark"><%= berita.judul %></h6>
-                            <p class="card-text text-muted"><small><%= berita.deskripsi.substring(0, 80) %>...</small></p> <!-- Potong deskripsi -->
-                          </div>
-                        </div>
-                      </a>
-                </div>
-                <% }) %>
+                                <div class="card-body text-start" style=" flex-grow: 1;">
+                                    <p class="text-muted"><small><span>
+                                                <%= berita.nama_depan %>
+                                            </span>
+                                            <%= berita.tanggal_format %>
+                                        </small></p>
+                                    <h6 class="card-title text-dark">
+                                        <%= berita.judul %>
+                                    </h6>
+                                    <p class="card-text text-muted"><small>
+                                            <%= berita.deskripsi.substring(0, 80) %>...
+                                        </small></p> <!-- Potong deskripsi -->
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <% }) %>
 
             </div>
             <a href="../../berita/users" class="btn btn-success mt-3">Berita Lainnya</a>
@@ -285,7 +294,7 @@
     <!-- Custom scripts -->
     <script type="text/javascript" src="js/script.js"></script>
 
-    
+
 </body>
 
 </html>

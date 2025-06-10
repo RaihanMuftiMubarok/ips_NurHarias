@@ -107,6 +107,8 @@ router.post("/log", async (req, res) => {
         req.session.nama = Data[0].nama;
         req.session.kontak = Data[0].kontak;
         req.session.email = Data[0].email;
+        req.session.foto = Data[0].foto || 'default.jpg';
+
       
         if (Data[0].role === "anggota") {
           connection.query(

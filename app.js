@@ -21,6 +21,7 @@ var pelatihRouter = require('./routes/pelatih');
 var absensiRouter = require('./routes/absensi');
 var nilaiRouter = require('./routes/nilai');
 var beritaRouter = require('./routes/berita'); 
+var tentang_kamiRouter = require('./routes/tentang_kami'); 
 
 
 
@@ -60,6 +61,11 @@ app.use(flash())
 // Middleware untuk set currentPath
 app.use((req, res, next) => {
   res.locals.currentPath = req.path;
+  res.locals.user = {
+    nama: req.session.nama,
+    role: req.session.role,
+    foto: req.session.foto || 'default.jpg',
+  };
   next();
 });
 
@@ -75,6 +81,7 @@ app.use('/absensi', absensiRouter);
 app.use('/nilai', nilaiRouter);
 app.use('/berita', beritaRouter);
 app.use('/album', albumRouter);
+app.use('/tentang_kami', tentang_kamiRouter);
 
 
 

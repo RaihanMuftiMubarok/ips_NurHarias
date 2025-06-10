@@ -28,97 +28,98 @@
   <div class="wripper sticky-top">
     <!-- Navbar Atas -->
     <div class="top-navbar d-flex justify-content-end align-items-center px-3">
-      <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-          <path fill="#ffff" fill-rule="evenodd"
-            d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42a18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z" />
-        </svg>
-        082332749088 </span>
-      <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path fill="#fff"
-            d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 4l-8 5l-8-5V6l8 5l8-5z" />
-        </svg>
-        nurhariasrantingtalango@gmail.com</span>
-    </div>
+      <span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+              <path fill="#ffff" fill-rule="evenodd"
+                  d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42a18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z" />
+          </svg>
+          082332749088 </span>
+      <span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path fill="#fff"
+                  d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 4l-8 5l-8-5V6l8 5l8-5z" />
+          </svg>
+          nurhariasrantingtalango@gmail.com</span>
+  </div>
 
-    <!-- Navbar Utama -->
-    <nav class="navbar navbar-expand-lg bg-white shadow-sm">
+  <!-- Navbar Utama -->
+  <nav class="navbar navbar-expand-lg bg-white shadow-sm">
       <div class="container">
-        <a class="navbar-brand" href="#">
-          <img src="../../images/logo_navbar.png" alt="Logo" width="auto" height="70">
+          <a class="navbar-brand" href="#">
+              <img src="../../images/logo_navbar.png" alt="Logo" width="auto" height="70">
 
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav mx-auto">
-            <li class="nav-item"><a class="nav-link" href="/">Beranda</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Tentang NH</a></li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="latihanDropdown" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">Latihan</a>
-              <ul class="dropdown-menu" aria-labelledby="latihanDropdown">
-                <li><a class="dropdown-item" href="../../jadwal/users">Jadwal</a></li>
-                <% if (user && user.role==='pelatih' ) { %>
-                  <li><a class="dropdown-item" href="../../absensi">Absensi</a></li>
-                  <% } else if (user && user.role==='anggota' ) { %>
-                    <li><a class="dropdown-item" href="../../absensi/users">Absensi</a></li>
-                    <% } %>
-                    <% if (user && user.role==='pelatih' ) { %>
-                      <li><a class="dropdown-item" href="../../nilai">Nilai</a></li>
-                      <% } else if (user && user.role==='anggota' ) { %>
-                          <li><a class="dropdown-item" href="../../nilai/users">Nilai</a></li>
-                          <% } %>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav mx-auto">
+                  <li class="nav-item"><a class="nav-link" href="/">Beranda</a></li>
+                  <li class="nav-item"><a class="nav-link" href="../../tentang_kami/users">Tentang NH</a></li>
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="latihanDropdown" role="button"
+                          data-bs-toggle="dropdown" aria-expanded="false">Latihan</a>
+                      <ul class="dropdown-menu" aria-labelledby="latihanDropdown">
+                          <li><a class="dropdown-item" href="../../jadwal/users">Jadwal</a></li>
+                          <% if (user && user.role==='pelatih' ) { %>
+                              <li><a class="dropdown-item" href="../../absensi">Absensi</a></li>
+                              <% } else if (user && user.role==='anggota' ) { %>
+                                  <li><a class="dropdown-item" href="../../absensi/users">Absensi</a></li>
+                                  <% } %>
+                                  <% if (user && user.role==='pelatih' ) { %>
+                                      <li><a class="dropdown-item" href="../../nilai">Nilai</a></li>
+                                      <% } else if (user && user.role==='anggota' ) { %>
+                                          <li><a class="dropdown-item" href="../../nilai/users">Nilai</a></li>
+                                          <% } %>
+                      </ul>
+                  </li>
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="artikelDropdown" role="button"
+                          data-bs-toggle="dropdown" aria-expanded="false">Artikel</a>
+                      <ul class="dropdown-menu" aria-labelledby="artikelDropdown">
+                          <li><a class="dropdown-item" href="../../berita/users">Berita</a></li>
+                          <li><a class="dropdown-item" href="../../album/users">Album</a></li>
+                      </ul>
+                  </li>
+                  <li class="nav-item"><a class="nav-link" href="../../pendaftaran/users">Pendaftaran</a></li>
               </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="artikelDropdown" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">Artikel</a>
-              <ul class="dropdown-menu" aria-labelledby="artikelDropdown">
-                <li><a class="dropdown-item" href="../../berita/users">Berita</a></li>
-                <li><a class="dropdown-item" href="../../album/users">Album</a></li>
-              </ul>
-            </li>
-            <li class="nav-item"><a class="nav-link" href="../../pendaftaran/users">Pendaftaran</a></li>
-          </ul>
-          <% if (user && user.nama) { %>
-            <div class="dropdown">
-              <a class="d-flex align-items-center text-success text-decoration-none dropdown-toggle" href="#"
-                id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                <img
-                  src="/images/<%= user.role === 'pelatih' ? 'pelatih' : 'anggota' %>/<%= user.foto || 'default.jpg' %>"
-                  alt="User" width="35" height="35" class="rounded-circle me-2" style="object-fit: cover;">
-                <strong>
-                  <%= user.nama %>
-                </strong>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="userMenu">
-                <li class="d-flex justify-content-center">
-                  <img
-                    src="/images/<%= user.role === 'pelatih' ? 'pelatih' : 'anggota' %>/<%= user.foto || 'default.jpg' %>"
-                    alt="User" width="60" height="60" class="rounded-circle" style="object-fit: cover;">
-                </li>
-                <li class="d-flex justify-content-center">
-                  <a class="dropdown-item p-2 d-flex justify-content-center align-items-center gap-2"
-                    href="/logout/landingpage">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-                      <path fill="#ff6c6c"
-                        d="M13 2v10h-2V2zm3.78 1.728l.809.589a9.5 9.5 0 1 1-11.178 0l.808-.59l1.178 1.617l-.808.59a7.5 7.5 0 1 0 8.822 0l-.808-.59z" />
-                    </svg>
-                    Logout
-                  </a>
-                </li>
-              </ul>
-            </div>
+              <% if (user && user.nama) { %>
+                  <div class="dropdown">
+                      <a class="d-flex align-items-center text-success text-decoration-none dropdown-toggle" href="#"
+                          id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                          <img src="/images/<%= user.role === 'pelatih' ? 'pelatih' : 'anggota' %>/<%= user.foto || 'default.jpg' %>"
+                              alt="User" width="35" height="35" class="rounded-circle me-2"
+                              style="object-fit: cover;">
+                          <strong>
+                              <%= user.nama %>
+                          </strong>
+                      </a>
+                      <ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="userMenu">
+                          <li class="d-flex justify-content-center">
+                              <img src="/images/<%= user.role === 'pelatih' ? 'pelatih' : 'anggota' %>/<%= user.foto || 'default.jpg' %>"
+                                  alt="User" width="60" height="60" class="rounded-circle" style="object-fit: cover;">
+                          </li>
+                          <li class="d-flex justify-content-center">
+                              <a class="dropdown-item p-2 d-flex justify-content-center align-items-center gap-2"
+                                  href="/logout/landingpage">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                      <path fill="#ff6c6c"
+                                          d="M13 2v10h-2V2zm3.78 1.728l.809.589a9.5 9.5 0 1 1-11.178 0l.808-.59l1.178 1.617l-.808.59a7.5 7.5 0 1 0 8.822 0l-.808-.59z" />
+                                  </svg>
+                                  Logout
+                              </a>
+                          </li>
+                      </ul>
+                  </div>
 
-            <% } else { %>
-              <a href="/login" class="btn btn-success">Login</a>
-              <% } %>
+                  <% } else { %>
+                      <a href="/login" class="btn btn-success">Login</a>
+                      <% } %>
 
-        </div>
+          </div>
       </div>
-    </nav>
+  </nav>
   </div>
 
   <div class="container mt-5 mb-4">

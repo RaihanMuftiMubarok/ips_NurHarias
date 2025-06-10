@@ -165,7 +165,7 @@ class Model_Absensi {
             );
         });
     }
-    
+
 
 
     static async getRekapByFilters({ bulan, tahun, tingkatan, idLatihan }) {
@@ -173,17 +173,17 @@ class Model_Absensi {
         let filter = `
           WHERE MONTH(a.tanggal) = ? AND YEAR(a.tanggal) = ?
         `;
-      
+
         if (tingkatan !== 'all') {
-          filter += ` AND b.tingkatan = ?`;
-          params.push(tingkatan);
+            filter += ` AND b.tingkatan = ?`;
+            params.push(tingkatan);
         }
-      
+
         if (idLatihan !== 'all') {
-          filter += ` AND c.id_jenis_latihan = ?`;
-          params.push(idLatihan);
+            filter += ` AND c.id_jenis_latihan = ?`;
+            params.push(idLatihan);
         }
-      
+
         const query = `
           SELECT a.*, b.nama, b.nia, b.tingkatan, c.nama_latihan 
           FROM absensi AS a
@@ -192,15 +192,17 @@ class Model_Absensi {
           ${filter}
           ORDER BY b.nama, a.tanggal ASC
         `;
-      
+
         return new Promise((resolve, reject) => {
-          connection.query(query, params, (err, results) => {
-            if (err) reject(err);
-            else resolve(results);
-          });
+            connection.query(query, params, (err, results) => {
+                if (err) reject(err);
+                else resolve(results);
+            });
         });
-      }
-      
+    }
+
+    
+
 }
 
 

@@ -16,7 +16,13 @@ router.get('/', async function (req, res, next) {
         title: "Users Home",
         email: Data[0].email,
         nama: Data[0].nama,
-        role: req.session.role
+        role: req.session.role,
+        user: {
+          nama: req.session.nama,
+          foto: req.session.foto,
+          role: req.session.role,
+          
+        },
       });
     }
     //Akhir Kondisi

@@ -1,14 +1,16 @@
 <%- include('../partials/__head.ejs') %>
-    <%- include('../partials/__nav.ejs') %>
+<%- include('../partials/__nav.ejs', { user: user }) %>
+
 
         <body>
+          
             <div class="container py-5">
                 <!-- Welcome Section -->
                 <div class="mb-4">
                     <h1 class="welcome-text">Welcome, <span id="username"><%= nama %></span></h1>
                     <p class="sub-text">
                         All systems are running smoothly! You have
-
+                      
                     </p>
                 </div>
 
@@ -292,6 +294,4 @@
   
   
 
-</body>
-
-</html>
+  <%- include('../partials/__foot.ejs') %>

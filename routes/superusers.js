@@ -24,16 +24,24 @@ router.get('/', async function (req, res, next) {
       const jumlahPelatih = await Dashboard.getJumlahPelatih();
 
       console.log("tingkatanData (dari DB):", jumlahTingkatan);
+      console.log("Session:", req.session);
 
       res.render("users/superusers", {
         title: "Users Home",
         email: Data[0].email,
         nama: Data[0].nama,
+        foto: Data[0].foto,
         data2: Data,
         role: req.session.role,
         tingkatanData: jumlahTingkatan, // hanya array angka!
         jumlahAnggota,
-        jumlahPelatih
+        jumlahPelatih,
+        user: {
+          nama: req.session.nama,
+          foto: req.session.foto,
+          role: req.session.role,
+          
+        },
       });
 
     } else {

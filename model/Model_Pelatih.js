@@ -79,7 +79,19 @@ class Model_Pelatih {
         });
     }
 
-
+    static async getByUserId(id_users) {
+        return new Promise((resolve, reject) => {
+            connection.query(
+                "SELECT * FROM pelatih WHERE id_users = ?",
+                [id_users],
+                (err, rows) => {
+                    if (err) reject(err);
+                    else resolve(rows);
+                }
+            );
+        });
+    }
+    
 
 
 }

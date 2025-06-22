@@ -1,65 +1,139 @@
 <%- include('../partials/__head.ejs') %>
-    <style>
-        body {
-            font-family: sans-serif;
-            background-color: #f0f0f0;
-        }
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #f0f0f0;
+    }
 
-        .kartu-container {
-            width: 350px;
-            margin: 30px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
+    .card-wrapper {
+        width: 700px;
+        height: 440px;
+        margin: 40px auto;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+    }
 
-        .foto {
-            width: 100%;
-            height: 100%;
-            border-radius: 10%;
-            object-fit: cover;
-            margin-bottom: 10px;
-        }
+    .card-header {
+        background: linear-gradient(to right, #00712D, #19ce37);
+        color: white;
+        padding: 10px 30px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
 
-        .qr-code {
-            margin-top: 20px;
-        }
-    </style>
+    .card-header img {
+        height: 80px;
+    }
 
+    .org-name {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .card-title {
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        margin: 15px 0 0 0;
+        color: #00712D;
+    }
+
+    .card-body {
+        display: flex;
+        padding: 5px 10px ;
+        flex: 1;
+        align-items: center;
+    }
+
+    .left-section {
+        width: 280px;
+        text-align: center;
+    }
+
+    .left-section img.profile {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 5px;
+        border: 3px solid #ccc;
+    }
+
+    .qr-code img {
+        width: 100px;
+        height: 100px;
+        padding-bottom: 10px;
+    }
+
+    .right-section {
+        flex: 1;
+        /* padding-left: 10px; */
+        margin-top: -20px;
+        margin-left: -20px;
+        font-size: 16px;
+        line-height: 1.8;
+    }
+
+    .right-section p {
+        margin: 6px 0;
+    }
+
+    .right-section strong {
+        display: inline-block;
+        width: 150px;
+    }
+
+    .btn-group {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .btn {
+        margin: 0 5px;
+    }
+</style>
 
 <body>
-    
-    <div class="kartu-container">
-        <h2>Kartu Anggota</h2>
-        
-            <img src="/images/anggota/<%= data.foto %>" class="foto" alt="foto" style="width: 8rem;">
-            
-                <p><strong>Nama:</strong>
-                    <%= data.nama %>
-                </p>
-                <p><strong>NIA:</strong>
-                    <%= data.nia %>
-                </p>
-                <p><strong>Tingkatan:</strong>
-                    <%= data.tingkatan %>
-                </p>
-                <p><strong>Tanggal Bergabung:</strong>
-                    <%= data.tanggal_masuk %>
-                </p>
+    <div class="card-wrapper">
+        <!-- Header -->
+        <div class="card-header">
+            <img src="/images/logo.png" alt="Logo Organisasi">
+            <div class="org-name">IPS NUR HARIAS RANTING TALANGO</div>
+        </div>
 
+        <!-- Title -->
+        <div class="card-title">Kartu Tanda Anggota</div>
 
+        <!-- Body -->
+        <div class="card-body">
+            <!-- Kiri -->
+            <div class="left-section">
+                <img src="/images/anggota/<%= data.foto %>" alt="Foto" class="profile">
                 <div class="qr-code">
-                    <!-- <p><strong>Scan untuk lihat profil</strong></p> -->
-                    <img src="<%= qrCode %>" width="150" height="150" />
+                    <img src="<%= qrCode %>" alt="QR Code">
                 </div>
+            </div>
+
+            <!-- Kanan -->
+            <div class="right-section">
+                <p><strong>Nama</strong>: <%= data.nama %></p>
+                <p><strong>NIA</strong>: <%= data.nia %></p>
+                <p><strong>Tingkatan</strong>: <%= data.tingkatan %></p>
+                <p><strong>Tanggal Masuk</strong>: <%= data.tanggal_masuk %></p>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <button type="button" class="btn btn-secondary"
-            onclick="history.back()">back</button>
-            <a href="/anggota/detail/<%= data.nia %>/kartu/download-image" class="btn btn-success">Download Kartu</a>
+
+    <!-- Tombol -->
+    <div class="btn-group">
+        <button type="button" class="btn btn-secondary" onclick="history.back()">Kembali</button>
+        <a href="/anggota/detail/<%= data.nia %>/kartu/download-image" class="btn btn-success">Download Kartu</a>
     </div>
+
     <%- include('../partials/__foot.ejs') %>
 </body>
-

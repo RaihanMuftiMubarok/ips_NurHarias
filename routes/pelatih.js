@@ -228,6 +228,101 @@ router.post("/update/:id",  upload.single("foto"), async (req, res, next) => {
     }
 });
 
+router.get("/editusers", async (req, res, next) => {
+    try {
+        if (!req.session.userId) {
+            return res.redirect('/login');
+        }
+
+        const id_users = req.session.userId;
+        const pelatihRows = await Model_Pelatih.getByUserId(id_users); // Pastikan method ini ada di model
+        if (!pelatihRows || pelatihRows.length === 0) {
+            req.flash("error", "Data pelatih tidak ditemukan");
+            return res.redirect('/');
+        }
+
+        const pelatih = pelatihRows[0];
+
+        res.render("pelatih/users/editusers", {
+            id: pelatih.nip,
+            data: pelatih,
+            user: {
+                nama: req.session.nama,
+                foto: req.session.foto,
+                role: req.session.role
+            }
+        });
+    } catch (error) {
+        console.error("Error in GET /editusers (pelatih):", error);
+        req.flash("error", "Terjadi kesalahan saat memuat data");
+        res.redirect('/');
+    }
+});
+
+router.post("/updateusers", upload.single("foto"), async (req, res, next) => {
+    try {
+        const id_users = req.session.userId;
+
+        const pelatihRows = await Model_Pelatih.getByUserId(id_users);
+        if (!pelatihRows.length) throw new Error("Data pelatih tidak ditemukan");
+        const pelatih = pelatihRows[0];
+
+        const filebaru = req.file ? req.file.filename : null;
+        const namaFileLama = pelatih.foto;
+        if (filebaru && namaFileLama) {
+            const oldPath = path.join(__dirname, '../public/images/pelatih', namaFileLama);
+            if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+        }
+
+        const foto = filebaru || namaFileLama;
+
+        let {
+            nama,
+            jenis_kelamin,
+            tempat_tanggal_lahir,
+            alamat,
+            ayah,
+            ibu,
+            tingkatan,
+            pendidikan_terakhir,
+            email,
+            kontak,
+        } = req.body;
+
+        const DataPelatih = {
+            nama,
+            jenis_kelamin,
+            tempat_tanggal_lahir,
+            alamat,
+            ayah,
+            ibu,
+            tingkatan,
+            pendidikan_terakhir,
+            email,
+            kontak,
+            foto
+        };
+
+        const DataUser = { nama, email, kontak };
+
+        await Model_Pelatih.Update(pelatih.nip, DataPelatih);
+        await Model_Users.UpdateById(id_users, DataUser);
+
+        if (nama !== req.session.nama || foto !== req.session.foto) {
+            req.session.nama = nama;
+            req.session.foto = foto;
+        }
+
+        req.flash("success", "Berhasil mengupdate data pelatih & user");
+        res.redirect('/');
+    } catch (err) {
+        console.error("Error in POST /updateusers (pelatih):", err);
+        req.flash("error", "Gagal mengupdate data pelatih");
+        res.redirect('/');
+    }
+});
+
+
 router.get('/delete/:id', async (req, res, next) => {
     try {
         const id = req.params.id;

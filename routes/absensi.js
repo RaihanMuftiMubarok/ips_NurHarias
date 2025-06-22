@@ -160,7 +160,7 @@ router.post('/store', async function (req, res, next) {
             await fetch('https://api.fonnte.com/send', {
               method: 'POST',
               headers: {
-                Authorization: 'YoBt6b6x6KE9k4WsTPfw',
+                Authorization: 'MPr29fTEUGQwo6AzP9j8',
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify({
@@ -277,6 +277,50 @@ router.get('/rekap', async (req, res) => {
     res.redirect('/absensi');
   }
 });
+
+
+// GET: Halaman edit absensi berdasarkan id_absensi
+router.get('/edit/:id', async (req, res) => {
+  const id = req.params.id;
+  const { nia, bulan, tahun } = req.query; // ambil dari query
+
+  try {
+    const absensi = await Model_Absensi.getById(id);
+    const jenisLatihan = await Model_JenisLatihan.getAll();
+
+    if (!absensi) {
+      return res.status(404).send('Data absensi tidak ditemukan.');
+    }
+
+    res.render('absensi/edit', {
+      absensi,
+      jenisLatihan,
+      nia,
+      bulan,
+      tahun,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Gagal menampilkan halaman edit absensi.');
+  }
+});
+
+// POST: Update absensi
+router.post('/update/:id', async (req, res) => {
+  const id = req.params.id;
+  const { tanggal, id_jenis_latihan, status, nia, bulan, tahun } = req.body;
+
+  try {
+    await Model_Absensi.updateAbsensi(id, { tanggal, id_jenis_latihan, status });
+
+    // Redirect ke halaman detail absensi berdasarkan NIA & bulan
+    res.redirect(`/absensi/detail/${nia}?bulan=${bulan}&tahun=${tahun}`);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Gagal mengupdate data absensi.');
+  }
+});
+
 
 
 

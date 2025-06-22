@@ -129,7 +129,7 @@ class Model_Absensi {
 
     static async getByNIAAndBulan(nia, bulan, tahun) {
         const query = `
-          SELECT a.tanggal, a.status, jl.nama_latihan
+          SELECT a.id_absensi,a.tanggal, a.status, jl.nama_latihan
           FROM absensi a
           JOIN jenis_latihan jl ON a.id_jenis_latihan = jl.id_jenis_latihan
           WHERE a.nia = ? AND MONTH(a.tanggal) = ? AND YEAR(a.tanggal) = ?
@@ -201,7 +201,40 @@ class Model_Absensi {
         });
     }
 
-    
+    // Ambil 1 data absensi berdasarkan id_absensi
+static async getById(id) {
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT a.*, b.nama, b.tingkatan, jl.nama_latihan
+        FROM absensi a
+        JOIN anggota b ON a.nia = b.nia
+        JOIN jenis_latihan jl ON a.id_jenis_latihan = jl.id_jenis_latihan
+        WHERE a.id_absensi = ?`;
+  
+      connection.query(query, [id], (err, results) => {
+        if (err) return reject(err);
+        resolve(results[0]);
+      });
+    });
+  }
+  
+  // Update data absensi
+  static async updateAbsensi(id, { tanggal, id_jenis_latihan, status }) {
+    return new Promise((resolve, reject) => {
+      const query = `
+        UPDATE absensi 
+        SET tanggal = ?, id_jenis_latihan = ?, status = ?
+        WHERE id_absensi = ?`;
+  
+      connection.query(query, [tanggal, id_jenis_latihan, status, id], (err, results) => {
+        if (err) return reject(err);
+        resolve(results);
+      });
+    });
+  }
+  
+  
+
 
 }
 

@@ -128,7 +128,6 @@ router.get("/edit/:id", async (req, res, next) => {
     }
 });
 
-
 router.post("/update/:id", upload.single("foto"), async (req, res, next) => {
     try {
         const id = req.params.id;
@@ -185,6 +184,88 @@ router.post("/update/:id", upload.single("foto"), async (req, res, next) => {
     }
 });
 
+// GET - Edit data anggota untuk user yang login
+router.get("/editusers", async (req, res, next) => {
+    try {
+        // Pengecekan session
+        if (!req.session.userId) {  // Ubah pengecekan, tidak perlu cek role
+            return res.redirect('/login');
+        }
+
+        // Dapatkan data anggota berdasarkan id_users dari session
+        const id_users = req.session.userId;
+        const anggotaRows = await Model_Anggota.getByUserId(id_users);
+        
+        if (!anggotaRows || anggotaRows.length === 0) {
+            req.flash("error", "Data anggota tidak ditemukan");
+            return res.redirect('/');
+        }
+
+        const anggota = anggotaRows[0];
+        
+        res.render("anggota/users/editusers", {  // Sesuaikan path view
+            id: anggota.id_anggota,
+            data: anggota,
+            user: {
+                nama: req.session.nama,
+                foto: req.session.foto,
+                role: req.session.role
+            }
+        });
+    } catch (error) {
+        console.error("Error in editusers route:", error);
+        req.flash("error", "Terjadi kesalahan saat memuat form edit");
+        res.redirect('/');
+    }
+});
+
+router.post("/updateusers", upload.single("foto"), async (req, res, next) => {
+    try {
+      const id_users = req.session.userId;
+  
+      // Ambil data anggota dulu
+      const anggotaRows = await Model_Anggota.getByUserId(id_users);
+      if (!anggotaRows.length) throw new Error("Data anggota tidak ditemukan");
+      const anggota = anggotaRows[0];
+  
+      // Handle foto dan set DataAnggota
+      const filebaru = req.file ? req.file.filename : null;
+      const namaFileLama = anggota.foto;
+      if (filebaru && namaFileLama) {
+        const oldPath = path.join(__dirname, '../public/images/anggota', namaFileLama);
+        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+      }
+      const foto = filebaru || namaFileLama;
+  
+      // Ambil dan format tanggal masuk
+      const moment = require("moment");
+      let { nama, jenis_kelamin, tempat_tanggal_lahir, alamat, peminatan, ayah, ibu, tingkatan, pendidikan_terakhir, email, kontak, tanggal_masuk } = req.body;
+      tanggal_masuk = moment(tanggal_masuk, "DD-MM-YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss");
+  
+      // Data untuk tabel anggota
+      const DataAnggota = { nama, jenis_kelamin, tempat_tanggal_lahir, alamat, peminatan, ayah, ibu, tingkatan, pendidikan_terakhir, email, kontak, tanggal_masuk, foto };
+      await Model_Anggota.Update(anggota.nia, DataAnggota);
+  
+      // Data untuk tabel users — hanya kolom yang sama
+      const DataUser = { nama, email, kontak };
+      await Model_Users.UpdateById(id_users, DataUser);
+  
+      // Update session jika diperlukan
+      if (nama !== req.session.nama || foto !== req.session.foto) {
+        req.session.nama = nama;
+        req.session.foto = foto;
+      }
+  
+      req.flash("success", "Berhasil mengupdate data anggota & user");
+      res.redirect('/');
+    } catch (err) {
+      console.error(err);
+      req.flash("error", "Gagal mengupdate data");
+      res.redirect("/");
+    }
+  });
+  
+
 router.get('/delete/:id', async (req, res, next) => {
     try {
         const id = req.params.id;
@@ -220,7 +301,7 @@ router.get('/detail/:nia/kartu', async (req, res) => {
         if (!data) {
             return res.status(404).send('Anggota tidak ditemukan');
         }
-        const qrLink = `http://192.168.204.209:3000/anggota/detail/${nia}`; // saat scan di komputer server
+        const qrLink = `https://ipsnhtalango.kabupatensumenep.com/anggota/detail/${nia}`; // saat scan di komputer server
 
         //   const qrLink = `https://domainmu.com/anggota/detail/${nia}`; // ganti dengan domain asli
         const qrCodeDataUrl = await QRCode.toDataURL(qrLink);
@@ -237,7 +318,7 @@ router.get('/detail/:nia/kartu', async (req, res) => {
 
 router.get('/detail/:nia/kartu/download-image', async (req, res) => {
     const nia = req.params.nia;
-    const url = `http://192.168.204.209:3000/anggota/detail/${nia}/kartu`; // Sesuaikan port
+    const url = `https://ipsnhtalango.kabupatensumenep.com/anggota/detail/${nia}/kartu`; // sesuaikan dengan port & URL kamu
 
     try {
         const browser = await puppeteer.launch();
@@ -247,7 +328,14 @@ router.get('/detail/:nia/kartu/download-image', async (req, res) => {
             waitUntil: 'networkidle0'
         });
 
-        const buffer = await page.screenshot({ fullPage: true });
+        // ✅ Cari elemen .card-wrapper (kartu anggota)
+        const cardElement = await page.$('.card-wrapper');
+        if (!cardElement) {
+            throw new Error("Elemen kartu tidak ditemukan di halaman.");
+        }
+
+        // ✅ Screenshot hanya elemen kartu anggota
+        const buffer = await cardElement.screenshot();
 
         await browser.close();
 
@@ -256,9 +344,9 @@ router.get('/detail/:nia/kartu/download-image', async (req, res) => {
 
         fs.writeFileSync(filepath, buffer);
 
+        // ✅ Download dan hapus file sementara
         res.download(filepath, filename, () => {
-            // Hapus file setelah diunduh (opsional)
-            fs.unlinkSync(filepath);
+            fs.unlinkSync(filepath); // hapus setelah diunduh
         });
 
     } catch (err) {

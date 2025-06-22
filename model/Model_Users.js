@@ -88,7 +88,15 @@ class Model_Users {
         });
     }
 
-
+    static async UpdateById(id_users, Data) {
+        return new Promise((resolve, reject) => {
+          connection.query('UPDATE users SET ? WHERE id_users = ?', [Data, id_users], (err, result) => {
+            if (err) reject(err);
+            else resolve(result);
+          })
+        })
+      }
+      
 }
 
 module.exports = Model_Users;

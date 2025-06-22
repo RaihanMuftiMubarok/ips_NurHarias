@@ -27,19 +27,37 @@
                         </div>
                     </div>
 
-                    <!-- Jumlah Cards -->
-                    <div class="col-lg-4 d-flex flex-column gap-4 ">
-                        <div class="jumlah-card">
-                            <b class="fs-3">Jumlah Anggota</b>
-                            <p class="fs-1">
-                                <%= jumlahAnggota %>
-                            </p>
+                              <!-- Jumlah Cards - Enhanced Version -->
+                      <div class="col-lg-4 d-flex flex-column gap-4">
+                        <div class="jumlah-card anggota-card">
+                            <div class="card-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Jumlah Anggota</h3>
+                                <p class="card-value"><%= jumlahAnggota %></p>
+                            </div>
                         </div>
-                        <div class="jumlah-card">
-                            <b class="fs-3">Jumlah Pelatih</b>
-                            <p class="fs-1">
-                                <%= jumlahPelatih %>
-                            </p>
+                        
+                        <div class="jumlah-card pelatih-card">
+                            <div class="card-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                    <circle cx="18" cy="6" r="1" fill="currentColor"></circle>
+                                </svg>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Jumlah Pelatih</h3>
+                                <p class="card-value"><%= jumlahPelatih %></p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -133,13 +151,74 @@
 
                     }
 
-                    .jumlah-card {
-                        background-color: #DEF9C4;
-                        border-radius: 1rem;
-                        /* color: white; */
-                        padding: 1rem;
-                        height: 100%;
-                    }
+                    /* Enhanced Jumlah Cards */
+        .jumlah-card {
+            background-color: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .jumlah-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .anggota-card {
+            border-left: 4px solid #4CAF50;
+        }
+
+        .pelatih-card {
+            border-left: 4px solid #2196F3;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .anggota-card .card-icon {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: #4CAF50;
+        }
+
+        .pelatih-card .card-icon {
+            background-color: rgba(33, 150, 243, 0.1);
+            color: #2196F3;
+        }
+
+        .card-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .card-content {
+            flex-grow: 1;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 0;
+            color: #333;
+        }
 
                     .image-illustration {
                         max-width: 100%;

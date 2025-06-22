@@ -22,6 +22,7 @@ var absensiRouter = require('./routes/absensi');
 var nilaiRouter = require('./routes/nilai');
 var beritaRouter = require('./routes/berita'); 
 var tentang_kamiRouter = require('./routes/tentang_kami'); 
+var resetRouter = require('./routes/reset'); 
 
 
 
@@ -41,6 +42,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
+
+app.locals.moment = require('moment');
 
 
 app.use(session({
@@ -82,6 +85,7 @@ app.use('/nilai', nilaiRouter);
 app.use('/berita', beritaRouter);
 app.use('/album', albumRouter);
 app.use('/tentang_kami', tentang_kamiRouter);
+app.use('/', resetRouter);
 
 
 

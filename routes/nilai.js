@@ -34,6 +34,56 @@ router.get('/', async function (req, res, next) {
   }
 });
 
+// GET - Nilai untuk user yang login (anggota)
+router.get('/users', async (req, res) => {
+  // Pengecekan session dan role
+  if (!req.session.userId || req.session.role !== 'anggota') {
+    return res.redirect('/login');
+  }
+
+  try {
+    // 1. Dapatkan data anggota berdasarkan id_users dari session
+    const id_users = req.session.userId;
+    const anggotaRows = await Model_Anggota.getByUserId(id_users);
+    const anggota = anggotaRows[0];
+
+    if (!anggota) {
+      req.flash('error', 'Data anggota tidak ditemukan.');
+      return res.redirect('/');
+    }
+
+    const nia = anggota.nia;
+
+    // 2. Ambil bulan dan tahun dari query, default ke bulan & tahun sekarang
+    const bulan = parseInt(req.query.bulan) || (new Date().getMonth() + 1);
+    const tahun = parseInt(req.query.tahun) || new Date().getFullYear();
+
+    // 3. Dapatkan data nilai bulanan
+    const nilai = await Model_Nilai.getNilaiBulananByNIA(nia, bulan, tahun);
+
+    // 4. Render view khusus untuk user
+    res.render('nilai/users/index', {
+      layout: 'layouts/main-layout',
+      title: 'Nilai Saya',
+      nilai,
+      namaAnggota: anggota.nama,
+      nia,
+      user: {
+        nama: req.session.nama,
+        foto: req.session.foto,
+        role: req.session.role
+      },
+      bulan,
+      tahun
+    });
+
+  } catch (error) {
+    console.error('❌ Error saat memuat data nilai:', error);
+    req.flash('error', 'Gagal memuat data nilai.');
+    res.redirect('/dashboard');
+  }
+});
+
 // GET - Halaman input nilai
 router.get('/create', async function (req, res, next) {
   try {

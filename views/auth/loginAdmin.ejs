@@ -62,34 +62,9 @@
               </div>
               <!-- /Logo -->
               <h4 class="mb-2">Welcome to IPS Nur Harias! 👋</h4>
-              <p class="mb-4">Please sign-in to your account </p>
+              <p class="mb-4">Login Sebagai Admin</p>
 
-              <!-- Flash Messages Section -->
-              <% if (typeof success !== 'undefined' && success.length > 0) { %>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                  <i class="bx bx-check-circle me-2"></i>
-                  <%= success %>
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-              <% } %>
-
-              <% if (typeof failure !== 'undefined' && failure.length > 0) { %>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                  <i class="bx bx-error-circle me-2"></i>
-                  <%= failure %>
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-              <% } %>
-
-              <% if (typeof error !== 'undefined' && error.length > 0) { %>
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                  <i class="bx bx-error-circle me-2"></i>
-                  <%= error %>
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-              <% } %>
-              <!-- End Flash Messages -->
-              <form id="formAuthentication" class="mb-3" action="/log" method="POST">
+              <form id="formAuthentication" class="mb-3" action="/logadmin" method="POST">
                 <div class="mb-3">
                   <label for="email" class="form-label">Email</label>
                   <input
@@ -97,16 +72,16 @@
                     class="form-control"
                     type="text"
                     name="email"
-                    placeholder="Enter your email"
+                    placeholder="Masukkan email"
                     autofocus
                   />
                 </div>
                 <div class="mb-3 form-password-toggle">
                   <div class="d-flex justify-content-between">
                     <label class="form-label" for="password" >Password</label>
-                    <a href="/reset-password-request">
+                    <!-- <a href="auth-forgot-password-basic.html">
                       <small>Forgot Password?</small>
-                    </a>
+                    </a> -->
                   </div>
                   <div class="input-group input-group-merge">
                     <input
@@ -124,16 +99,16 @@
                   
                 </div>
                 <div class="mb-3">
-                  <button class="btn btn-success d-grid w-100" type="submit">Sign in</button>
+                  <button class="btn btn-success d-grid w-100" type="submit">Login</button>
                 </div>
               </form>
 
-              <!-- <p class="text-center">
-                <span>New on our platform?</span>
+              <p class="text-center">
+                <span>Belum Punya Akun?</span>
                 <a href="register">
-                  <span>Create an account</span>
+                  <span>Buat Akun Sekarang</span>
                 </a>
-              </p> -->
+              </p>
             </div>
           </div>
           <!-- /Register -->

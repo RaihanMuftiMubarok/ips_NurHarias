@@ -17,7 +17,7 @@
         rel="stylesheet">
     <!-- MDB -->
     <link rel="stylesheet" href="css/mdb.min.css" />
-    <link rel="stylesheet" href="../stylesheets/album.css" />
+    <link rel="stylesheet" href="../../stylesheets/berita.css" />
 
     <!-- CSS for Floating Action Button -->
 
@@ -49,7 +49,7 @@
         <nav class="navbar navbar-expand-lg bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="#">
-                    <img src="../images/logo_navbar.png" alt="Logo" width="auto" height="70">
+                    <img src="../../images/logo_navbar.png" alt="Logo" width="auto" height="70">
 
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -134,76 +134,95 @@
     </div>
 
     <div class="container py-5">
-        <div class="row">
-          <h2 class="text-success fw-bold mb-3">Album</h2>
-      
-          <div class="d-flex justify-content-center gap-3 mb-4 flex-wrap">
-            <button class="btn filter-btn active" data-filter="all">Semua</button>
-            <button class="btn filter-btn" data-filter="pelatihan">Pelatihan</button>
-            <button class="btn filter-btn" data-filter="acara">Acara</button>
-            <button class="btn filter-btn" data-filter="keagamaan">Keagamaan</button>
-            <button class="btn filter-btn" data-filter="prestasi">Prestasi</button>
-          </div>
-      
-          <div class="album-container">
-            <% data.forEach((item, index) => { %>
-              <div class="album-item"
-                   data-category="<%= item.kategori.toLowerCase() %>"
-                   data-bs-toggle="modal"
-                   data-bs-target="#albumModal"
-                   data-index="<%= index %>">
-                <img src="/images/album/<%= item.gambar %>" alt="<%= item.judul %>" class="album-img">
-                <div class="album-overlay">
-                  <div class="album-title"><%= item.judul %></div>
-                  <div class="album-desc">
-                    <%= item.deskripsi && item.deskripsi.length > 100 
-                        ? item.deskripsi.substring(0, 100) + '...' 
-                        : item.deskripsi %>
-                  </div>
-                </div>
-              </div>
-            <% }); %>
-          </div>
-      
-          <!-- MODAL -->
-          <div class="modal fade" id="albumModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-xl">
-              <div class="modal-content">
-                <div class="modal-body p-0 position-relative">
-                  <div id="albumCarousel" class="carousel slide" data-bs-ride="false">
-                    <div class="carousel-inner">
-                      <% data.forEach((item, index) => { %>
-                        <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-                          <img src="/images/album/<%= item.gambar %>" class="d-block w-100" alt="<%= item.judul %>">
-                          <!-- Caption di luar gambar -->
-                          <div class="modal-caption-outside">
-                            <h5 class="fw-bold"><%= item.judul %></h5>
-                            <p><%= item.deskripsi %></p>
-                          </div>
-                        </div>
-                      <% }); %>
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#albumCarousel" data-bs-slide="prev">
-                      <span class="carousel-control-prev-icon"></span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#albumCarousel" data-bs-slide="next">
-                      <span class="carousel-control-next-icon"></span>
-                    </button>
-                    <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal"></button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
+        <h2 class="mb-4 text-center">Edit Absensi</h2>
 
-      <footer class="footer text-light">
+        <form action="/absensi/update/<%= absensi.id_absensi %>" method="POST">
+            <div class="row mb-3">
+                <input type="hidden" name="nia" value="<%= nia %>">
+                <input type="hidden" name="bulan" value="<%= bulan %>">
+                <input type="hidden" name="tahun" value="<%= tahun %>">
+                <div class="col-md-4">
+                    <label class="form-label">Tanggal Latihan</label>
+                    <%
+  const tgl = new Date(absensi.tanggal);
+  const yyyy = tgl.getFullYear();
+  const mm = String(tgl.getMonth() + 1).padStart(2, '0');
+  const dd = String(tgl.getDate()).padStart(2, '0');
+  const tanggalFormatted = `${yyyy}-${mm}-${dd}`;
+%>
+<input type="date" name="tanggal" class="form-control" value="<%= tanggalFormatted %>" disabled>
+<input type="hidden" name="tanggal" class="form-control" value="<%= tanggalFormatted %>" >
+
+
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Jenis Latihan</label>
+                    <select name="id_jenis_latihan" class="form-select" disabled>
+                        <% jenisLatihan.forEach(j=> { %>
+                            <option value="<%= j.id_jenis_latihan %>" <%=absensi.id_jenis_latihan===j.id_jenis_latihan
+                                ? 'selected' : '' %>><%= j.nama_latihan %>
+                            </option>
+                            <% }) %>
+                    </select>
+                    <!-- Tambahkan hidden input agar nilai tetap dikirim ke server -->
+<input type="hidden" name="id_jenis_latihan" value="<%= absensi.id_jenis_latihan %>">
+
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">NIA</label>
+                <input type="text" class="form-control" value="<%= absensi.nia %>" disabled>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Nama</label>
+                <input type="text" class="form-control" value="<%= absensi.nama %>" disabled>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tingkatan</label>
+                <input type="text" class="form-control" value="<%= absensi.tingkatan %>" disabled>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Status Kehadiran</label><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="status" value="H" <%=absensi.status==='H'
+                        ? 'checked' : '' %> required>
+                    <label class="form-check-label">Hadir</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="status" value="I" <%=absensi.status==='I'
+                        ? 'checked' : '' %>>
+                    <label class="form-check-label">Izin</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="status" value="S" <%=absensi.status==='S'
+                        ? 'checked' : '' %>>
+                    <label class="form-check-label">Sakit</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="status" value="A" <%=absensi.status==='A'
+                        ? 'checked' : '' %>>
+                    <label class="form-check-label">Alfa</label>
+                </div>
+            </div>
+
+            <div class="form-group mt-4">
+                <a class="btn btn-secondary" href="/absensi">Batal</a>
+                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+
+
+
+    <footer class="footer text-light">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-4 text-center footer-logo">
-                    <img src="../images/logo_footer.png" alt="Logo" class="mb-5">
+                    <img src="../../images/logo_footer.png" alt="Logo" class="mb-5">
                     <div class="social-icons">
                         <a href="#">
                             <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
@@ -283,41 +302,6 @@
     <script type="text/javascript" src="js/mdb.min.js"></script>
     <!-- Custom scripts -->
     <script type="text/javascript" src="js/script.js"></script>
-
-    <script>
-        const albumItems = document.querySelectorAll('.album-item');
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        const carousel = new bootstrap.Carousel(document.querySelector('#albumCarousel'));
-      
-        // Fitur Filter Album
-        filterButtons.forEach(button => {
-          button.addEventListener('click', () => {
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            const filter = button.getAttribute('data-filter');
-      
-            albumItems.forEach(item => {
-              const category = item.getAttribute('data-category');
-              if (filter === 'all' || filter === category) {
-                item.style.display = 'block';
-              } else {
-                item.style.display = 'none';
-              }
-            });
-          });
-        });
-      
-        // Fitur Modal Album dengan Carousel
-        albumItems.forEach(item => {
-          item.addEventListener('click', () => {
-            const index = parseInt(item.getAttribute('data-index'), 10);
-            carousel.to(index);
-          });
-        });
-      </script>
-      
-  
-  
 </body>
 
 </html>

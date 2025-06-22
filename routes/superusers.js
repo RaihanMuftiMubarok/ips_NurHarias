@@ -12,7 +12,7 @@ router.get('/', async function (req, res, next) {
     if (Data.length > 0) {
       // Validasi role
       if (Data[0].role !== "admin") {
-        return res.redirect('/logout');
+        return res.redirect('/logoutadmin');
       }
 
       // Ambil data dashboard
@@ -50,7 +50,7 @@ router.get('/', async function (req, res, next) {
 
   } catch (error) {
     console.log(error);
-    res.redirect("/login");
+    res.redirect("/loginAdmin");
   }
 });
 

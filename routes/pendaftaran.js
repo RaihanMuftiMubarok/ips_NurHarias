@@ -241,7 +241,7 @@ router.get('/detail/:id', async (req, res, next) => {
 
 const qs = require('qs');
 const formatNomor = nomor => nomor.replace(/^0/, '62');
-const fontekApiKey = 'YoBt6b6x6KE9k4WsTPfw'; // Ganti dengan API key Fonte
+const fontekApiKey = 'MPr29fTEUGQwo6AzP9j8'; // Ganti dengan API key Fonte
 
 router.post("/update-status/:no_pendaftaran", async (req, res) => {
     try {
@@ -325,7 +325,7 @@ router.post("/update-status/:no_pendaftaran", async (req, res) => {
         // === STATUS: TOLAK ===
         if (status === "tolak") {
             const nomorTujuan = formatNomor(pendaftaran.kontak);
-            const pesanPenolakan = `Mohon maaf anda tidak dapat bergabung pada IPSI Nur Harias.\nAlasan: ${alasan || "Tidak disebutkan"}`;
+            const pesanPenolakan = `Mohon maaf anda tidak dapat bergabung pada IPSI Nur Harias.\n ${alasan || "Tidak disebutkan"}`;
 
             const payload = qs.stringify({
                 target: nomorTujuan,

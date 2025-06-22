@@ -49,7 +49,15 @@ router.get("/register", function (req, res, next) {
 });
 
 router.get("/login", function (req, res, next) {
-  res.render("auth/login");
+  res.render("auth/login", {
+    success: req.flash('success'),
+    failure: req.flash('failure'),
+    error: req.flash('error'),
+    title: 'Login - IPS Nur Harias'
+  });
+});
+router.get("/loginAdmin", function (req, res, next) {
+  res.render("auth/loginAdmin");
 });
 
 // ROUTE UNTUK REGISTER USER
@@ -132,10 +140,7 @@ router.post("/log", async (req, res) => {
               return res.redirect("/");
             }
           );
-        } else if (Data[0].role === "admin") {
-          req.session.foto = "default.jpg";
-          req.flash("success", "Berhasil login");
-          return res.redirect("/superusers");
+        
         } else {
           req.flash("failure", "Role user tidak dikenali");
           return res.redirect("/login");
@@ -158,16 +163,48 @@ router.post("/log", async (req, res) => {
   }
 });
 
+// ROUTE UNTUK LOGIN ADMIN
+router.post("/logadmin", async (req, res) => {
+  let { email, password } = req.body;
 
-// ROUTE UNTUK LOGOUT
-router.get("/logout", function (req, res) {
-  req.session.destroy(function (err) {
-    if (err) {
-      console.error(err);
+  try {
+    let Data = await Model_Users.Login(email);
+    console.log("Login admin:", Data);
+
+    if (Data.length > 0) {
+      let enkripsi = Data[0].password;
+      let cek = await bcrypt.compare(password, enkripsi);
+
+      if (cek) {
+        if (Data[0].role === "admin") {
+          req.session.userId = Data[0].id_users;
+          req.session.role = Data[0].role;
+          req.session.nama = Data[0].nama;
+          req.session.kontak = Data[0].kontak;
+          req.session.email = Data[0].email;
+          req.session.foto = "default.jpg";
+
+          req.flash("success", "Berhasil login sebagai admin");
+          return res.redirect("/superusers");
+        } else {
+          req.flash("failure", "Role bukan admin");
+          return res.redirect("/loginAdmin");
+        }
+      } else {
+        req.flash("failure", "Email atau password salah");
+        return res.redirect("/loginAdmin");
+      }
+    } else {
+      req.flash("failure", "Akun tidak ditemukan");
+      return res.redirect("/loginAdmin");
     }
-    res.redirect("/login");
-  });
+  } catch (err) {
+    console.error("Error saat login admin:", err);
+    req.flash("failure", "Terjadi kesalahan saat login admin");
+    return res.redirect("/loginAdmin");
+  }
 });
+
 
 // ROUTE UNTUK LOGOUT
 router.get("/logout/landingpage", function (req, res) {
@@ -176,6 +213,16 @@ router.get("/logout/landingpage", function (req, res) {
       console.error(err);
     }
     res.redirect("/");
+  });
+});
+
+// ROUTE UNTUK LOGOUT
+router.get("/logoutadmin", function (req, res) {
+  req.session.destroy(function (err) {
+    if (err) {
+      console.error(err);
+    }
+    res.redirect("/loginAdmin");
   });
 });
 module.exports = router;
